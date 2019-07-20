@@ -8,6 +8,8 @@ import (
 	"io/ioutil"
 	"net/http"
 	"os"
+
+	"os/exec"
 	"strconv"
 
 	"github.com/360EntSecGroup-Skylar/excelize"
@@ -19,12 +21,21 @@ type Imagestrut struct {
 }
 
 func main() {
+	// 获取当前文件的路径
+	dir, err := os.Getwd()
+	if err != nil {
+		return
+	}
+	//生产文本暂时交给ruby处理
+	cmd := exec.Command("ruby", dir+"/run.rb")
+	cmd.Run()
+
 	//建立通道,保证进程全部执行完
 	ch := make(chan string)
 	//打开表格
 	var count int
 
-	f, err := excelize.OpenFile("./资料.xlsx")
+	f, err := excelize.OpenFile(dir + "/资料.xlsx")
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -48,7 +59,7 @@ func main() {
 				continue
 			}
 			count++
-			go getImg(row[0], img.ImageUrl, strconv.Itoa(i)+img.Name+".jpg", ch)
+			go getImg(dir+"/"+row[0], img.ImageUrl, strconv.Itoa(i)+img.Name+".jpg", ch)
 
 		}
 
@@ -63,7 +74,7 @@ func main() {
 func getImg(dirName string, url string, colorName string, ch chan (string)) (n int64, err error) {
 
 	os.Mkdir(dirName, os.ModePerm)
-	out, err := os.Create(dirName + "\\" + colorName)
+	out, err := os.Create(dirName + "/" + colorName)
 
 	defer out.Close()
 	// fmt.Println(url)
