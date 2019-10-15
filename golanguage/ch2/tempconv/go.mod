@@ -1,3 +1,3 @@
-module tempconv0
+module tempconv
 
 go 1.13
