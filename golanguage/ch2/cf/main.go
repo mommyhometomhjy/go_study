@@ -5,7 +5,7 @@ import (
 	"os"
 	"strconv"
 
-	"tempconv"
+	"github.com/mommyhometomhjy/go_study/go语言圣经/ch2/tempconv"
 )
 
 func main() {
