@@ -1,0 +1,6 @@
+{
+	"database": {
+		"driver": "sqlite3",
+		"dbname": "test.db"
+	}
+}
