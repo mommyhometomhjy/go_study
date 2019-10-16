@@ -1,0 +1,45 @@
+{{define "books/new"}}
+{{template "layout/header" .}}
+<div class="uk-width-1-1">
+<form class="uk-form" action="/books" method="post">
+  <input type="text" name="Id" hidden/>
+<table class="uk-table">
+<tr>
+  <td class="uk-width-1-5 uk-text-right">ISBN:</td>
+  <td><input type="text" name="isbn" class="uk-width-4-5"/></td>
+</tr>
+
+<tr>
+  <td class="uk-width-1-5 uk-text-right">标题:</td>
+  <td><input type="text" name="title" class="uk-width-4-5"/></td>
+</tr>
+
+<tr>
+  <td class="uk-width-1-5 uk-text-right">副标题:</td>
+  <td><input type="text" name="subtitle" class="uk-width-4-5"/></td>
+</tr>
+
+<tr>
+  <td class="uk-width-1-5 uk-text-right">作者:</td>
+  <td><input type="text" name="author" class="uk-width-4-5"/></td>
+</tr>
+
+
+<tr>
+  <td class="uk-width-1-5 uk-text-right">简介:</td>
+  <td><textarea  name="summary" class="uk-width-4-5"></textarea></td>
+</tr>
+<tr>
+  <td></td>
+  <td class="uk-text-center">
+    <button type="submit">保存</button>
+    <button type="reset">撤销</button>
+  </td>
+</tr>
+</table>
+</form>
+</tr>
+
+
+{{template "layout/footer"}}
+{{end}}
