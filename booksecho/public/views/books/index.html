@@ -2,7 +2,7 @@
 
 {{template "layout/header" .}}
 <div class="uk-width-1-1">
-  <a class="uk-button" href="/book/new" target="_blank">新建</a>
+  <a class="uk-button" href="/book/new">新建</a>
 </div>
 <div class="uk-width-1-1">
   <table class="uk-table uk-table-hover">
@@ -21,5 +21,23 @@
   {{end}}
   </table>
 </div>
+<script>
+$(document).ready(function(){
+  $(".book_delete_link").click(function(){
+    var self = $(this)
+    var link = self.attr("data-href")
+    UIkit.modal.confirm("确定删除吗?", function(){
+       $.ajax({
+        url:link,
+        type:"DELETE",
+        success:function(resp){
+          UIkit.modal.alert(resp);
+          self.parentsUntil("tr").parent().remove()
+        }
+      }) 
+    });
+  })
+})
+</script>
 {{template "layout/footer"}}
 {{end}}

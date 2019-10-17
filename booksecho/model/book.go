@@ -48,7 +48,7 @@ func fetchBook(book *Book) {
 	json.Unmarshal(pix, result)
 
 	// fmt.Println(result.Status, result.Msg)
-	if result.Status == "0" {
+	if result.Msg == "ok" {
 
 		book.Author = result.Book.Author
 
@@ -60,7 +60,7 @@ func fetchBook(book *Book) {
 
 		book.Title = result.Book.Title
 	} else {
-		book.Title = "查不到此书,请手动编辑"
+		book.Title = "查不到此书"
 	}
 	db.Save(book)
 
