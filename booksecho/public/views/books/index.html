@@ -31,7 +31,7 @@ $(document).ready(function(){
         url:link,
         type:"DELETE",
         success:function(resp){
-          UIkit.modal.alert(resp);
+          UIkit.notify(resp,{timeout: 3000});
           self.parentsUntil("tr").parent().remove()
         }
       }) 
