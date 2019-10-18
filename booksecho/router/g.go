@@ -89,32 +89,31 @@ func createBook(c echo.Context) (err error) {
 		return c.String(200, "创建失败")
 	}
 	file, err := c.FormFile("file")
-	if err != nil {
-		return err
-	}
-	src, err := file.Open()
-	if err != nil {
-		return err
-	}
-	defer src.Close()
+	if err == nil {
+		src, err := file.Open()
+		if err != nil {
+			return err
+		}
+		defer src.Close()
 
-	dir, _ := os.Getwd()
+		dir, _ := os.Getwd()
 
-	dst, err := os.Create(filepath.Join(dir, "public", "static", "images", book.Isbn+path.Ext(file.Filename)))
+		dst, err := os.Create(filepath.Join(dir, "public", "static", "images", book.Isbn+path.Ext(file.Filename)))
 
-	if err != nil {
-		return err
+		if err != nil {
+			return err
+		}
+
+		defer dst.Close()
+		if _, err = io.Copy(dst, src); err != nil {
+			return err
+		}
+		book.Pic = "/static/images/" + book.Isbn + path.Ext(file.Filename)
 	}
-
-	defer dst.Close()
-	if _, err = io.Copy(dst, src); err != nil {
-		return err
-	}
-	book.Pic = "/static/images/" + book.Isbn + path.Ext(file.Filename)
 
 	model.CreateBook(book)
-
-	return c.Redirect(http.StatusMovedPermanently, "/book/"+strconv.Itoa(book.ID))
+	v := IndexVeiws{Title: "查看书籍", Data: book}
+	return c.Render(200, "books/show", &v)
 }
 func getBookById(c echo.Context) error {
 	id, _ := strconv.Atoi(c.Param("id"))
@@ -147,31 +146,31 @@ func updateBook(c echo.Context) error {
 	book.Title = c.FormValue("title")
 
 	file, err := c.FormFile("file")
-	if err != nil {
-		return err
-	}
-	src, err := file.Open()
-	if err != nil {
-		return err
-	}
-	defer src.Close()
+	if err == nil {
+		src, err := file.Open()
+		if err != nil {
+			return err
+		}
+		defer src.Close()
 
-	dir, _ := os.Getwd()
+		dir, _ := os.Getwd()
 
-	dst, err := os.Create(filepath.Join(dir, "public", "static", "images", book.Isbn+path.Ext(file.Filename)))
+		dst, err := os.Create(filepath.Join(dir, "public", "static", "images", book.Isbn+path.Ext(file.Filename)))
 
-	if err != nil {
-		return err
+		if err != nil {
+			return err
+		}
+
+		defer dst.Close()
+		if _, err = io.Copy(dst, src); err != nil {
+			return err
+		}
+		book.Pic = "/static/images/" + book.Isbn + path.Ext(file.Filename)
 	}
-
-	defer dst.Close()
-	if _, err = io.Copy(dst, src); err != nil {
-		return err
-	}
-	book.Pic = "/static/images/" + book.Isbn + path.Ext(file.Filename)
 
 	model.UpdateBook(book)
-	return c.Redirect(http.StatusMovedPermanently, "/book/"+strconv.Itoa(book.ID))
+	v := IndexVeiws{Title: "查看书籍", Data: book}
+	return c.Render(200, "books/show", &v)
 }
 
 func getBookByIsbn(c echo.Context) error {

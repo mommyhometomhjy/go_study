@@ -9,6 +9,5 @@ func main() {
 	db := model.ConnectToDB()
 	defer db.Close()
 	model.SetDB(db)
-
 	router.Start()
 }

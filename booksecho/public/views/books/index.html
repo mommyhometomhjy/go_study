@@ -1,6 +1,7 @@
 {{define "books/index"}}
 
 {{template "layout/header" .}}
+<div class="uk-grid">
 <div class="uk-width-1-1">
   <a class="uk-button" href="/book/new">新建</a>
 </div>
@@ -20,6 +21,7 @@
   {{template "book/_book" .}}
   {{end}}
   </table>
+</div>
 </div>
 <script>
 $(document).ready(function(){
