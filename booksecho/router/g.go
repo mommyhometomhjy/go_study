@@ -2,6 +2,9 @@ package router
 
 import (
 	"booksecho/model"
+	"os"
+	"path"
+	"path/filepath"
 	"strconv"
 
 	"html/template"
@@ -85,6 +88,29 @@ func createBook(c echo.Context) (err error) {
 	if err = c.Bind(book); err != nil {
 		return c.String(200, "创建失败")
 	}
+	file, err := c.FormFile("file")
+	if err != nil {
+		return err
+	}
+	src, err := file.Open()
+	if err != nil {
+		return err
+	}
+	defer src.Close()
+
+	dir, _ := os.Getwd()
+
+	dst, err := os.Create(filepath.Join(dir, "public", "static", "images", book.Isbn+path.Ext(file.Filename)))
+
+	if err != nil {
+		return err
+	}
+
+	defer dst.Close()
+	if _, err = io.Copy(dst, src); err != nil {
+		return err
+	}
+	book.Pic = "/static/images/" + book.Isbn + path.Ext(file.Filename)
 
 	model.CreateBook(book)
 
@@ -119,6 +145,30 @@ func updateBook(c echo.Context) error {
 	book.Subtitle = c.FormValue("subtitle")
 	book.Summary = c.FormValue("summary")
 	book.Title = c.FormValue("title")
+
+	file, err := c.FormFile("file")
+	if err != nil {
+		return err
+	}
+	src, err := file.Open()
+	if err != nil {
+		return err
+	}
+	defer src.Close()
+
+	dir, _ := os.Getwd()
+
+	dst, err := os.Create(filepath.Join(dir, "public", "static", "images", book.Isbn+path.Ext(file.Filename)))
+
+	if err != nil {
+		return err
+	}
+
+	defer dst.Close()
+	if _, err = io.Copy(dst, src); err != nil {
+		return err
+	}
+	book.Pic = "/static/images/" + book.Isbn + path.Ext(file.Filename)
 
 	model.UpdateBook(book)
 	return c.Redirect(http.StatusMovedPermanently, "/book/"+strconv.Itoa(book.ID))
