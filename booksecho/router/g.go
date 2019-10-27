@@ -16,7 +16,7 @@ import (
 )
 
 type Template struct {
-	templates *template.Template
+	templates map[string]*template.Template
 }
 type IndexVeiws struct {
 	Title    string
@@ -25,7 +25,8 @@ type IndexVeiws struct {
 }
 
 var (
-	e *echo.Echo
+	e         *echo.Echo
+	templates map[string]*template.Template
 )
 
 func init() {
@@ -34,7 +35,7 @@ func init() {
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
 	t := &Template{
-		templates: template.Must(template.ParseGlob("public/views/**/*.html")),
+		templates: PopulateTemplates(),
 	}
 	e.Renderer = t
 
@@ -42,7 +43,8 @@ func init() {
 
 }
 func (t *Template) Render(w io.Writer, name string, data interface{}, c echo.Context) error {
-	return t.templates.ExecuteTemplate(w, name, data)
+
+	return t.templates[name].Execute(w, data)
 }
 
 func Start() {
@@ -74,13 +76,13 @@ func registerRouters() {
 
 func getAllBooks(c echo.Context) error {
 	v := IndexVeiws{Title: "所有书籍", Data: model.GetAllBooks()}
-	return c.Render(http.StatusOK, "books/index", &v)
+	return c.Render(http.StatusOK, "index.html", &v)
 }
 
 func newBook(c echo.Context) error {
 	book := new(model.Book)
 	v := IndexVeiws{Title: "新建书籍", Data: book}
-	return c.Render(http.StatusOK, "books/new", &v)
+	return c.Render(http.StatusOK, "new.html", &v)
 }
 func createBook(c echo.Context) (err error) {
 	book := new(model.Book)
@@ -113,13 +115,13 @@ func createBook(c echo.Context) (err error) {
 
 	model.CreateBook(book)
 	v := IndexVeiws{Title: "查看书籍", Data: book}
-	return c.Render(200, "books/show", &v)
+	return c.Render(200, "show.html", &v)
 }
 func getBookById(c echo.Context) error {
 	id, _ := strconv.Atoi(c.Param("id"))
 	book, _ := model.GetBookById(id)
 	v := IndexVeiws{Title: "查看书籍", Data: book}
-	return c.Render(200, "books/show", &v)
+	return c.Render(200, "show.html", &v)
 
 }
 
@@ -127,7 +129,7 @@ func editBookById(c echo.Context) error {
 	id, _ := strconv.Atoi(c.Param("id"))
 	book, _ := model.GetBookById(id)
 	v := IndexVeiws{Title: "编辑书籍", Data: book}
-	return c.Render(200, "books/edit", &v)
+	return c.Render(200, "edit.html", &v)
 }
 func deleteBookById(c echo.Context) error {
 	id, _ := strconv.Atoi(c.Param("id"))
@@ -170,7 +172,7 @@ func updateBook(c echo.Context) error {
 
 	model.UpdateBook(book)
 	v := IndexVeiws{Title: "查看书籍", Data: book}
-	return c.Render(200, "books/show", &v)
+	return c.Render(200, "show.html", &v)
 }
 
 func getBookByIsbn(c echo.Context) error {

@@ -1,0 +1,58 @@
+{{define "content"}}
+
+<div class="uk-grid">
+  <div class="uk-width-1-1">
+    <a class="uk-button" href="/book/new">新建</a>
+  </div>
+  <div class="uk-width-1-1">
+    <table class="uk-table uk-table-hover">
+      <tr>
+        <th class="uk-width-1-10">id</th>
+        <th class="uk-width-1-10">isbn</th>
+        <th class="uk-width-1-10">标题</th>
+        <th class="uk-width-1-10">副标题</th>
+        <th class="uk-width-1-10">图片</th>
+        <th class="uk-width-1-10">作者</th>
+        <th class="uk-width-3-10">简介</th>
+        <th class="uk-width-1-10">操作</th>
+      </tr>
+      {{range .Data}}
+      <tr>
+        <td class="uk-width-1-10 uk-table-middle">{{.ID}}</td>
+        <td class="uk-width-1-10 uk-table-middle">{{.Isbn}}</td>
+        <td class="uk-width-1-10 uk-table-middle">{{.Title}}</td>
+        <td class="uk-width-1-10 uk-table-middle">{{.Subtitle}}</td>
+        <td class="uk-width-1-10 uk-table-middle"><img src="{{.Pic}}" widtd="80px" /></td>
+        <td class="uk-width-1-10 uk-table-middle">{{.Author}}</td>
+        <td class="uk-width-3-10 uk-table-middle">{{.Summary}}</td>
+        <td class="uk-width-1-10 uk-table-middle">
+          <div class="uk-button-group">
+            <a class="uk-button" href="/book/{{.ID}}">查看</a>
+            <a class="uk-button" href="/book/{{.ID}}/edit">编辑</a>
+            <button class="uk-button book_delete_link" data-href="/book/{{.ID}}">删除</button>
+          </div>
+        </td>
+      </tr>
+      {{end}}
+    </table>
+  </div>
+</div>
+<script>
+  $(document).ready(function () {
+    $(".book_delete_link").click(function () {
+      var self = $(this)
+      var link = self.attr("data-href")
+      UIkit.modal.confirm("确定删除吗?", function () {
+        $.ajax({
+          url: link,
+          type: "DELETE",
+          success: function (resp) {
+            UIkit.notify(resp, { timeout: 3000 });
+            self.parentsUntil("tr").parent().remove()
+          }
+        })
+      });
+    })
+  })
+</script>
+{{end}}

@@ -1,0 +1,75 @@
+{{define "content"}}
+
+<div class="uk-width-1-1">
+    {{if .Data.ID}}
+    <form class="uk-form" action="/book/{{.Data.ID}}" method="POST" enctype="multipart/form-data">
+        <input type="text" name="id" hidden value={{.Data.ID}} />
+        {{else}}
+        <form class="uk-form" action="/books" method="post" enctype="multipart/form-data">
+            {{end}}
+            <div class="uk-grid">
+                <div class="uk-width-3-5">
+
+                    <table class="uk-table uk-grid">
+                        <tr>
+                            <td class="uk-width-1-5 uk-text-right">ISBN:</td>
+                            <td><input type="text" name="isbn" class="uk-width-4-5" value={{.Data.Isbn}} /><i
+                                    class="uk-icon-button uk-icon-search" id="isbn-search"></i></td>
+                        </tr>
+
+                        <tr>
+                            <td class="uk-width-1-5 uk-text-right">标题:</td>
+                            <td><input type="text" name="title" class="uk-width-4-5" value={{.Data.Title}} /></td>
+                        </tr>
+
+                        <tr>
+                            <td class="uk-width-1-5 uk-text-right">副标题:</td>
+                            <td><input type="text" name="subtitle" class="uk-width-4-5" value={{.Data.Subtitle}} /></td>
+                        </tr>
+
+                        <tr>
+                            <td class="uk-width-1-5 uk-text-right">作者:</td>
+                            <td><input type="text" name="author" class="uk-width-4-5" value={{.Data.Author}} /></td>
+                        </tr>
+
+
+                        <tr>
+                            <td class="uk-width-1-5 uk-text-right">简介:</td>
+                            <td><textarea name="summary" class="uk-width-4-5" value={{.Data.Summary}}></textarea></td>
+                        </tr>
+                        <tr>
+                            <td class="uk-width-1-5 uk-text-right">修改图片:</td>
+                            <td><input type="file" name="file" class="uk-width-4-5" /></td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="uk-width-2-5 uk-container-center">
+                    <img src="{{.Data.Pic}}" />
+                </div>
+            </div>
+
+            <div class="uk-button-group">
+                <a href="/books" class="uk-button">返回</a>
+                <button type="submit" class="uk-button">保存</button>
+                <button type="reset" class="uk-button">撤销</button>
+            </div>
+        </form>
+</div>
+<script>
+    $(document).ready(function () {
+        $("#isbn-search").click(function () {
+            var isbn = $("[name=isbn]").val()
+            $.ajax({
+                url: "/book/isbn/" + isbn,
+                success: function (resp) {
+                    location.href = "http://localhost:1323/book/" + resp + "/edit"
+                }
+
+            })
+        })
+    })
+</script>
+
+
+
+{{end}}

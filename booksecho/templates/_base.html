@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>{{.Title}}</title>
+    <link rel="stylesheet" href="/static/css/uikit.min.css" />
+    <link rel="stylesheet" href="/static/css/components/notify.css" />
+    <script src="/static/js/jquery.js"></script>
+    <script src="/static/js/uikit.min.js"></script>
+    <script src="/static/js/components/notify.js"></script>
+</head>
+
+<body class="uk-gird">
+    <header class="uk-width-1-1">
+        <nav class="uk-navbar">
+            <ul class="uk-navbar-nav">
+                <li class="uk-active"><a href="/books">我的书</a></li>
+            </ul>
+        </nav>
+    </header>
+    {{template "content" .}}
+
+</body>
+
+</html>
