@@ -1,0 +1,19 @@
+package model
+
+import (
+	"github.com/jinzhu/gorm"
+)
+
+type Goods struct {
+	gorm.Model
+	// 产品sku
+	GoodsNo string
+
+	// 速卖通id
+	AliexpressId string
+
+	// 产品进价
+	GoodsPrice float64
+	// 单个包裹重量
+	GoodsWeight float64
+}
