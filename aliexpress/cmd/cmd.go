@@ -51,8 +51,8 @@ func ParseOrderExcel() {
 			OrderNo: row[0],
 
 			// 物流方式,物流单号,物流状态,物流花费,包裹重量,签收耗时
-			OrderShippingMethod:        strings.Split(row[24], ":")[0],
-			OrderShippingNo:            strings.Split(row[24], ":")[1],
+			OrderShippingMethod:        strings.Trim(strings.Split(row[24], ":")[0], " \n"),
+			OrderShippingNo:            strings.Trim(strings.Split(row[24], ":")[1], " \n"),
 			OrderShippingStatus:        row[1],
 			OrderShippingCost:          0.0,
 			OrderShippingWeight:        0.0,
@@ -161,6 +161,7 @@ func ParseShippingCost() {
 			continue
 		}
 		orders := model.GetOrderByShippingNo(row[1])
+		// fmt.Println(len(orders), row[1])
 		cost, _ := strconv.ParseFloat(row[7], 64)
 		weight, _ := strconv.ParseFloat(row[5], 64)
 		if weight < 10 {
@@ -170,7 +171,8 @@ func ParseShippingCost() {
 			order.OrderShippingCost = cost
 			order.OrderShippingWeight = weight
 			model.UpdateOrder(&order)
-		}
+			// }
 
+		}
 	}
 }

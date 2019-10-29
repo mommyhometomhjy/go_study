@@ -13,7 +13,7 @@ type Order struct {
 
 	// 物流方式,物流单号,物流状态,物流花费,包裹重量,签收耗时
 	OrderShippingMethod        string
-	OrderShippingNo            string
+	OrderShippingNo            string `gorm:"INDEX:shippingnno"`
 	OrderShippingStatus        string
 	OrderShippingCost          float64
 	OrderShippingWeight        float64
@@ -53,7 +53,7 @@ func CountOrderByOrderNo(orderNo string) (total int) {
 
 func GetOrderByShippingNo(no string) []Order {
 	var order []Order
-	db.Where("order_shipping_no = ? ", no).Find(&order)
+	db.Where("order_shipping_no =? ", no).Find(&order)
 	return order
 }
 func UpdateOrder(order *Order) {

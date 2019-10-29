@@ -12,5 +12,5 @@ func main() {
 	// cmd.ParseOrderExcel()
 	// cmd.ParseGoodsExcel()
 	// cmd.ParseStandShippingCost()
-	cmd.ParseShippingCost()
+	// cmd.ParseShippingCost()
 }
