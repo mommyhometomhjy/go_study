@@ -11,5 +11,6 @@ func main() {
 	model.SetDB(db)
 	// cmd.ParseOrderExcel()
 	// cmd.ParseGoodsExcel()
-	cmd.ParseStandShippingCost()
+	// cmd.ParseStandShippingCost()
+	cmd.ParseShippingCost()
 }

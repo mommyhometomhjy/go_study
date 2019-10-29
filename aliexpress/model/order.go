@@ -50,3 +50,12 @@ func CountOrderByOrderNo(orderNo string) (total int) {
 	db.Where("order_no =?", orderNo).Find(&order).Count(&total)
 	return total
 }
+
+func GetOrderByShippingNo(no string) []Order {
+	var order []Order
+	db.Where("order_shipping_no = ? ", no).Find(&order)
+	return order
+}
+func UpdateOrder(order *Order) {
+	db.Save(order)
+}

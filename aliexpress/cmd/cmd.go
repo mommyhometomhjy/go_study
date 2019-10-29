@@ -144,3 +144,33 @@ func ParseStandShippingCost() {
 		model.UpdateShippingCost(&shippingCost)
 	}
 }
+func ParseShippingCost() {
+	f, err := excelize.OpenFile("cmd/shipfundList.xlsx")
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	rows := f.GetRows("sheet1")
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	for index, row := range rows {
+		if index == 0 {
+			continue
+		}
+		orders := model.GetOrderByShippingNo(row[1])
+		cost, _ := strconv.ParseFloat(row[7], 64)
+		weight, _ := strconv.ParseFloat(row[5], 64)
+		if weight < 10 {
+			weight *= 1000
+		}
+		for _, order := range orders {
+			order.OrderShippingCost = cost
+			order.OrderShippingWeight = weight
+			model.UpdateOrder(&order)
+		}
+
+	}
+}
