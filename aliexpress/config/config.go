@@ -22,6 +22,3 @@ func getConfig() {
 func GetDataBaseConfig() (driver, dbname string) {
 	return viper.GetString("database.driver"), viper.GetString("database.dbname")
 }
-func GetAliexpress() (percent, exchnge float64) {
-	return viper.GetFloat64("aliexpress.percent"), viper.GetFloat64("aliexpress.exchange")
-}

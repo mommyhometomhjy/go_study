@@ -177,4 +177,5 @@ func ParseShippingCost() {
 	}
 
 	model.UpdateGOodsWeightReferOrder()
+	model.UpdateGoodsPrice()
 }

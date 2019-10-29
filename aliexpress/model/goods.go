@@ -1,6 +1,10 @@
 package model
 
 import (
+	"fmt"
+	"math"
+	"strings"
+
 	"github.com/jinzhu/gorm"
 )
 
@@ -18,13 +22,28 @@ type Goods struct {
 	GoodsWeight float64
 	//库存
 	GoodsStock uint
+	//售价
+	GoodsSellPrice float64
 }
 
 func FindGoodsByGoodsNo(goodsNo string) Goods {
 	var goods Goods
-	db.FirstOrCreate(&goods, Goods{GoodsNo: goodsNo})
+	db.FirstOrCreate(&goods, Goods{GoodsNo: strings.ToUpper(goodsNo)})
 	return goods
 }
 func UpdateGoods(goods *Goods) {
 	db.Save(goods)
+}
+func UpdateGoodsPrice() {
+	var goodss []Goods
+	percent, exchange := 0.857, 7.0
+	db.Where("goods_weight >0").Find(&goodss)
+	for _, goods := range goodss {
+
+		w := fmt.Sprintf("%d", int(math.Ceil(goods.GoodsWeight/10.0)*10))
+
+		standShippingCost := GetPriceByWeight(w)
+		goods.GoodsSellPrice = math.Ceil((goods.GoodsPrice+3+standShippingCost)/percent/exchange) - 0.01
+		db.Save(goods)
+	}
 }

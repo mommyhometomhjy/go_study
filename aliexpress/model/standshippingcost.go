@@ -17,3 +17,8 @@ func GetShippingCostByWeight(weight string) StandShippingCost {
 func UpdateShippingCost(s *StandShippingCost) {
 	db.Save(s)
 }
+func GetPriceByWeight(weight string) float64 {
+	var s StandShippingCost
+	db.Where("weight =?", weight).Find(&s)
+	return s.Price
+}

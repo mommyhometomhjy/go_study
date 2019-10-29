@@ -2,10 +2,6 @@
 	"database": {
 		"driver": "sqlite3",
 		"dbname": "aliexpress.db"
-	},
-	"aliexpres":{
-		"percent":0.857,
-		"exchange":7
 	}
 
 }
