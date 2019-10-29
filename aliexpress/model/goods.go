@@ -7,7 +7,7 @@ import (
 type Goods struct {
 	gorm.Model
 	// 产品sku
-	GoodsNo string
+	GoodsNo string `gorm:"UNIQUE"`
 
 	// 速卖通id
 	AliexpressId string
@@ -16,4 +16,10 @@ type Goods struct {
 	GoodsPrice float64
 	// 单个包裹重量
 	GoodsWeight float64
+}
+
+func FindGoodsByGoodsNo(goodsNo string) Goods {
+	var goods Goods
+	db.FirstOrCreate(&goods, Goods{GoodsNo: goodsNo})
+	return goods
 }
