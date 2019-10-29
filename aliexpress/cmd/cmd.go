@@ -145,6 +145,7 @@ func ParseStandShippingCost() {
 	}
 }
 func ParseShippingCost() {
+
 	f, err := excelize.OpenFile("cmd/shipfundList.xlsx")
 	if err != nil {
 		fmt.Println(err)
@@ -171,8 +172,9 @@ func ParseShippingCost() {
 			order.OrderShippingCost = cost
 			order.OrderShippingWeight = weight
 			model.UpdateOrder(&order)
-			// }
 
 		}
 	}
+
+	model.UpdateGOodsWeightReferOrder()
 }
