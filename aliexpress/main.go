@@ -9,5 +9,7 @@ func main() {
 	db := model.ConnectToDB()
 	defer db.Close()
 	model.SetDB(db)
-	cmd.ParseExcel()
+	// cmd.ParseOrderExcel()
+	// cmd.ParseGoodsExcel()
+	cmd.ParseStandShippingCost()
 }

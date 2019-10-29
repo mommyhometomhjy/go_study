@@ -16,10 +16,15 @@ type Goods struct {
 	GoodsPrice float64
 	// 单个包裹重量
 	GoodsWeight float64
+	//库存
+	GoodsStock uint
 }
 
 func FindGoodsByGoodsNo(goodsNo string) Goods {
 	var goods Goods
 	db.FirstOrCreate(&goods, Goods{GoodsNo: goodsNo})
 	return goods
+}
+func UpdateGoods(goods *Goods) {
+	db.Save(goods)
 }

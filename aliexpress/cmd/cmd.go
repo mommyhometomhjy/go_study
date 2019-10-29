@@ -10,7 +10,7 @@ import (
 	"github.com/360EntSecGroup-Skylar/excelize"
 )
 
-func ParseExcel() {
+func ParseOrderExcel() {
 	f, err := excelize.OpenFile("cmd/导出订单.xlsx")
 	if err != nil {
 		fmt.Println(err)
@@ -91,4 +91,56 @@ func ParseExcel() {
 		}
 	}
 
+}
+
+func ParseGoodsExcel() {
+	f, err := excelize.OpenFile("cmd/店小秘导出商品.xlsx")
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	rows := f.GetRows("产品列表")
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	for index, row := range rows {
+		if index == 0 {
+			continue
+		}
+		goods := model.FindGoodsByGoodsNo(row[1])
+		goods.AliexpressId = row[0]
+		stock, _ := strconv.Atoi(row[3])
+		goods.GoodsStock = uint(stock)
+		model.UpdateGoods(&goods)
+	}
+}
+
+func ParseStandShippingCost() {
+	f, err := excelize.OpenFile("cmd/标准运费.xlsx")
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	rows := f.GetRows("Worksheet1")
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	for index, row := range rows {
+		if index == 0 {
+			continue
+		}
+
+		price, err := strconv.ParseFloat(row[1], 64)
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+		shippingCost := model.GetShippingCostByWeight(row[0])
+		shippingCost.Price = price
+		model.UpdateShippingCost(&shippingCost)
+	}
 }
