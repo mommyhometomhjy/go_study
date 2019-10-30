@@ -1,0 +1,17 @@
+{{define "order/_order"}}
+<tr>
+    <td>{{.OrderNo}}</td>
+    <td>{{.OrderBuyer}}</td>
+    <td>{{.OrderReceiverCountry}}</td>
+    <td>{{.OrderShippingMethod}}</td>
+    <td>{{.OrderShippingNo}}</td>
+    <td>{{.OrderShippingStatus}}</td>
+    <td style="width:180px;text-align: center;"> 
+        <div class="btn-group btn-group-sm" role="group">
+            <button type="button" class="btn btn-default">详情</button>
+            <button type="button" class="btn btn-default">编辑</button>
+            <button type="button" class="btn btn-default">删除</button>
+        </div>
+    </td>
+</tr>
+{{end}}

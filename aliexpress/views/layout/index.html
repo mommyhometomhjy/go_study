@@ -2,7 +2,10 @@
 {{template "layout/header" .}}
 
 <body>
-    Hello111, {{.Words}}!
+    <div class="container">
+        {{template "layout/nav"}}
+        Hello111, {{.Words}}!
+    </div>
 </body>
 {{template "layout/footer"}}
 {{end}}
