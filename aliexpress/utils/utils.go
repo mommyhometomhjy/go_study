@@ -1,4 +1,4 @@
-package cmd
+package utils
 
 import (
 	"aliexpress/model"
@@ -86,9 +86,9 @@ func ParseOrderExcel() {
 
 			number, _ := strconv.Atoi(strings.Split(skuNum, " * ")[1])
 			orderDetails := model.OrderDetails{
-				OrderId: order.ID,
-				GoodsId: goods.ID,
-				Number:  uint(number),
+				Order:  order,
+				Goods:  goods,
+				Number: uint(number),
 			}
 			model.CreateOrderDetails(&orderDetails)
 		}
@@ -179,7 +179,7 @@ func ParseShippingCost() {
 		}
 	}
 
-	model.UpdateGOodsWeightReferOrder()
+	model.UpdateGoodsWeightReferOrder()
 	model.UpdateGoodsPrice()
 }
 
@@ -197,11 +197,12 @@ func ExportGoodsIncludePrice() {
 	f.SetCellValue("Sheet1", "D1", `*库存
 	（必填)
 	`)
+
 	for index, goods := range goodss {
-		f.SetCellValue("Sheet1", "A"+strconv.Itoa(index+2), goods.AliexpressId)
-		f.SetCellValue("Sheet1", "B"+strconv.Itoa(index+2), goods.GoodsNo)
-		f.SetCellValue("Sheet1", "C"+strconv.Itoa(index+2), goods.GoodsSellPrice)
-		f.SetCellValue("Sheet1", "D"+strconv.Itoa(index+2), goods.GoodsStock)
+		f.SetCellValue("Sheet1", fmt.Sprint("A%d", index+2), goods.AliexpressId)
+		f.SetCellValue("Sheet1", fmt.Sprint("B%d", index+2), goods.GoodsNo)
+		f.SetCellValue("Sheet1", fmt.Sprint("C%d", index+2), goods.GoodsSellPrice)
+		f.SetCellValue("Sheet1", fmt.Sprint("D%d", index+2), goods.GoodsStock)
 	}
 
 	err := f.SaveAs("./Book1.xlsx")

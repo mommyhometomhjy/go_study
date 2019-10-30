@@ -1,0 +1,19 @@
+{{define "order/index"}}
+{{template "layout/header" .}}
+
+<body>
+    <div class="container">
+        <table class="table">
+            <tr>
+                <th>订单号</th>
+            </tr>
+            {{range .Orders}}
+            <tr>
+                <td>{{.OrderNo}}</td>
+            </tr>
+            {{end}}
+        </table>
+    </div>
+</body>
+{{template "layout/footer"}}
+{{end}}

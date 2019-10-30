@@ -7,13 +7,13 @@ import (
 type OrderDetails struct {
 	gorm.Model
 	// 关联的订单id
-	OrderId uint
+	Order Order `gorm:"association_foreignkey:ID"`
 
-	// 关联的产品id
-	GoodsId uint
+	Goods Goods `gorm:"association_foreignkey:ID"`
 	//当前产品的数量
 	Number uint
 }
-func CreateOrderDetails(orderDetails *OrderDetails){
-    db.Create(orderDetails)
+
+func CreateOrderDetails(orderDetails *OrderDetails) {
+	db.Create(orderDetails)
 }

@@ -52,15 +52,15 @@ func CountOrderByOrderNo(orderNo string) (total int) {
 }
 
 func GetOrderByShippingNo(no string) []Order {
-	var order []Order
-	db.Where("order_shipping_no =? ", no).Find(&order)
-	return order
+	var orders []Order
+	db.Where("order_shipping_no =? ", no).Find(&orders)
+	return orders
 }
 func UpdateOrder(order *Order) {
 	db.Save(order)
 }
 
-func UpdateGOodsWeightReferOrder() {
+func UpdateGoodsWeightReferOrder() {
 	db.Exec(`update goods
 	set goods_weight = (select we from (select avg(weight) as we,goods_no 
 	from (select 
@@ -84,4 +84,10 @@ func UpdateGOodsWeightReferOrder() {
 	group by order_shipping_no 
 	having count(order_no)=1)
 	group by goods_no) as t2 where t2.goods_no = goods.goods_no )`)
+}
+
+func GetOrders() []Order {
+	var orders []Order
+	db.Find(&orders)
+	return orders
 }

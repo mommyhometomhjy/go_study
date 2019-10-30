@@ -24,6 +24,9 @@ type Goods struct {
 	GoodsStock uint
 	//售价
 	GoodsSellPrice float64
+
+	//上次售价
+	GoodsLastSellPrice float64
 }
 
 func FindGoodsByGoodsNo(goodsNo string) Goods {
@@ -43,6 +46,7 @@ func UpdateGoodsPrice() {
 		w := fmt.Sprintf("%d", int(math.Ceil(goods.GoodsWeight/10.0)*10))
 
 		standShippingCost := GetPriceByWeight(w)
+		goods.GoodsLastSellPrice = goods.GoodsSellPrice
 		goods.GoodsSellPrice = math.Ceil((goods.GoodsPrice+3+standShippingCost)/percent/exchange) - 0.01
 		db.Save(goods)
 	}
@@ -50,6 +54,6 @@ func UpdateGoodsPrice() {
 
 func GetGoodsIncludeSellPriceAndAliexpressId() []Goods {
 	var goodss []Goods
-	db.Where("goods_sell_price >0 and aliexpress_id <>''").Order("goods_no").Find(&goodss)
+	db.Where("goods_sell_price <>goods_last_sell_price and aliexpress_id <>''").Order("goods_no").Find(&goodss)
 	return goodss
 }

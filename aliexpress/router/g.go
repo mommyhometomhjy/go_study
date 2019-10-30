@@ -1,7 +1,7 @@
 package router
 
 import (
-	"aliexpress/model"
+	"aliexpress/vm"
 	"html/template"
 	"io"
 	"net/http"
@@ -22,9 +22,6 @@ func (t *Template) Render(w io.Writer, name string, data interface{}, c echo.Con
 }
 
 func init() {
-	db := model.ConnectToDB()
-	defer db.Close()
-	model.SetDB(db)
 
 	e = echo.New()
 
@@ -51,7 +48,19 @@ func StartUp() {
 }
 
 func registerRouter() {
-	e.GET("/", func(c echo.Context) error {
-		return c.Render(http.StatusOK, "hello", "World")
-	})
+	e.GET("/", indexHandler)
+	e.GET("/order", orderIndexHandler)
+}
+
+func indexHandler(c echo.Context) error {
+	vop := vm.IndexViewModelOp{}
+	vm := vop.GetVM()
+
+	return c.Render(http.StatusOK, "index", &vm)
+}
+func orderIndexHandler(c echo.Context) error {
+	vop := vm.OrderViewModelOp{}
+	vm := vop.GetVM()
+
+	return c.Render(http.StatusOK, "order/index", &vm)
 }
