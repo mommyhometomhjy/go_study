@@ -40,7 +40,7 @@ func init() {
 
 	//绑定模板
 	t := &Template{
-		templates: template.Must(template.ParseGlob("/views/**/**.html")),
+		templates: template.Must(template.ParseGlob("views/*/*.html")),
 	}
 	e.Renderer = t
 }
@@ -52,6 +52,6 @@ func StartUp() {
 
 func registerRouter() {
 	e.GET("/", func(c echo.Context) error {
-		return c.String(http.StatusOK, "Hello, World!")
+		return c.Render(http.StatusOK, "hello", "World")
 	})
 }
