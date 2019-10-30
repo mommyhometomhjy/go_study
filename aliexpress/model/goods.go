@@ -47,3 +47,9 @@ func UpdateGoodsPrice() {
 		db.Save(goods)
 	}
 }
+
+func GetGoodsIncludeSellPriceAndAliexpressId() []Goods {
+	var goodss []Goods
+	db.Where("goods_sell_price >0 and aliexpress_id <>''").Order("goods_no").Find(&goodss)
+	return goodss
+}

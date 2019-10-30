@@ -31,7 +31,10 @@ func ParseOrderExcel() {
 		if row[24] == "" {
 			continue
 		}
-
+		//跳过没有sku的行
+		if row[11] == "" {
+			continue
+		}
 		//跳过已经更新了的订单
 		if model.CountOrderByOrderNo(row[0]) > 0 {
 			continue
@@ -178,4 +181,31 @@ func ParseShippingCost() {
 
 	model.UpdateGOodsWeightReferOrder()
 	model.UpdateGoodsPrice()
+}
+
+func ExportGoodsIncludePrice() {
+	goodss := model.GetGoodsIncludeSellPriceAndAliexpressId()
+	f := excelize.NewFile()
+	f.SetCellValue("Sheet1", "A1", `*产品ID
+	（必填）
+	`)
+	f.SetCellValue("Sheet1", "B1", `*商品编码
+	（必填）`)
+	f.SetCellValue("Sheet1", "C1", `*价格
+	（必填）
+	`)
+	f.SetCellValue("Sheet1", "D1", `*库存
+	（必填)
+	`)
+	for index, goods := range goodss {
+		f.SetCellValue("Sheet1", "A"+strconv.Itoa(index+2), goods.AliexpressId)
+		f.SetCellValue("Sheet1", "B"+strconv.Itoa(index+2), goods.GoodsNo)
+		f.SetCellValue("Sheet1", "C"+strconv.Itoa(index+2), goods.GoodsSellPrice)
+		f.SetCellValue("Sheet1", "D"+strconv.Itoa(index+2), goods.GoodsStock)
+	}
+
+	err := f.SaveAs("./Book1.xlsx")
+	if err != nil {
+		fmt.Println(err)
+	}
 }

@@ -2,7 +2,7 @@ package main
 
 import (
 	"aliexpress/model"
-	// "aliexpress/cmd"
+	"aliexpress/cmd"
 )
 
 func main() {
@@ -16,4 +16,6 @@ func main() {
 
 	// cmd.ParseShippingCost()
 	model.UpdateGoodsPrice()
+
+	cmd.ExportGoodsIncludePrice()
 }
