@@ -25,7 +25,7 @@ func ConnectToDB() *gorm.DB {
 	}
 	// db.AutoMigrate(&Order{})
 	// db.AutoMigrate(&Goods{})
-	// db.AutoMigrate(&OrderDetails{})
+	db.AutoMigrate(&OrderDetails{})
 	// db.AutoMigrate(&StandShippingCost{})
 	return db
 }

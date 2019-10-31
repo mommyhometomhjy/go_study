@@ -16,7 +16,8 @@
             </div>
             <div class="col-md-4">
                 <div class="btn-group btn-group-xs" role="group">
-                    <button type="button" class="btn btn-default">批量导入订单</button>
+                    <button type="button" class="btn btn-default" data-toggle="modal"
+                        data-target="#importOrderModal">批量导入订单</button>
                     <button type="button" class="btn btn-default">批量导入运费</button>
                     <button type="button" class="btn btn-default">手工新建订单</button>
                 </div>
@@ -37,6 +38,8 @@
             {{end}}
         </table>
     </div>
+
+    {{template "order/_importOrder"}}
 </body>
 {{template "layout/footer"}}
 {{end}}

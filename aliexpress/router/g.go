@@ -1,14 +1,10 @@
 package router
 
 import (
-	"aliexpress/vm"
 	"html/template"
 	"io"
-	"net/http"
-	"os"
 
 	"github.com/labstack/echo"
-	"github.com/labstack/echo/middleware"
 )
 
 var e *echo.Echo
@@ -29,11 +25,7 @@ func init() {
 	e.Static("/static", "static")
 
 	//设置输出日志
-	logF, _ := os.OpenFile("log/log.txt", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
-	e.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
-		Format: "time=${time_rfc3339}, method=${method}, uri=${uri}, status=${status}\r\n",
-		Output: logF,
-	}))
+	// e.Use(middleware.Logger())
 
 	//绑定模板
 	t := &Template{
@@ -50,17 +42,5 @@ func StartUp() {
 func registerRouter() {
 	e.GET("/", indexHandler)
 	e.GET("/order", orderIndexHandler)
-}
-
-func indexHandler(c echo.Context) error {
-	vop := vm.IndexViewModelOp{}
-	vm := vop.GetVM()
-
-	return c.Render(http.StatusOK, "index", &vm)
-}
-func orderIndexHandler(c echo.Context) error {
-	vop := vm.OrderViewModelOp{}
-	vm := vop.GetVM()
-
-	return c.Render(http.StatusOK, "order/index", &vm)
+	e.POST("/import/order", orderImportExcel)
 }
