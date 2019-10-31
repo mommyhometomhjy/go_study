@@ -7,10 +7,10 @@ import (
 type OrderDetails struct {
 	gorm.Model
 	// 关联的订单id
-	Order   Order `gorm:"foreignkey:OrderId"`
+	Order
 	OrderId uint
 
-	Goods   Goods `gorm:"foreignkey:GoodsId"`
+	Goods
 	GoodsId uint
 	//当前产品的数量
 	Number uint
