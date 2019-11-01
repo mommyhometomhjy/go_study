@@ -3,7 +3,6 @@ package router
 import (
 	"aliexpress/model"
 	"aliexpress/vm"
-	"fmt"
 	"net/http"
 
 	"github.com/labstack/echo"
@@ -13,7 +12,7 @@ func orderIndexHandler(c echo.Context) error {
 	vop := vm.OrderViewModelOp{}
 	vm := vop.GetVM()
 	err := c.Render(http.StatusOK, "order/index", &vm)
-	fmt.Println(err)
+	// fmt.Println(err)
 	return err
 }
 
