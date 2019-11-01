@@ -6,7 +6,7 @@ import (
 
 type OrderViewModel struct {
 	BaseViewModel
-	Orders *[]model.Order
+	Orders []model.Order
 }
 type OrderViewModelOp struct{}
 
@@ -14,7 +14,8 @@ func (OrderViewModelOp) GetVM() OrderViewModel {
 	orders := model.GetOrders()
 	v := OrderViewModel{
 		BaseViewModel{Title: "订单列表"},
-		&orders,
+		orders,
 	}
+	// fmt.Println(orders[0])
 	return v
 }

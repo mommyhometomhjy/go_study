@@ -10,6 +10,5 @@ import (
 func indexHandler(c echo.Context) error {
 	vop := vm.IndexViewModelOp{}
 	vm := vop.GetVM()
-
 	return c.Render(http.StatusOK, "index", &vm)
 }

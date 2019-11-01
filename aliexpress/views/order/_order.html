@@ -2,7 +2,7 @@
 <tr>
     <td>
         {{range .OrderDetailss}}
-        {{.Goods.GoodsNo}} x {{if .Number gt 1}}<span style="color:red">{{.Number}}</span>{{else}}{{.Number}}{{end}}
+        {{.Goods.GoodsNo}} x {{if gt .Number 1}}<span style="color:red">{{.Number}}</span>{{else}}{{.Number}}{{end}}
         {{end}}
     </td>
     <td>{{.OrderMoney}}</td>
