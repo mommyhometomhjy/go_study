@@ -1,0 +1,32 @@
+{{define "order/new"}}
+{{template "layout/header" .}}
+
+<body>
+    <div class="container">
+        {{template "layout/nav"}}
+        <div class="row">
+            <div class="col-md-2">
+                {{template "order/_aside"}}
+            </div>
+            <div class="col-md-10">
+                <div class="row">
+
+                    <button type="button" class="btn btn-primary btn-lg" data-toggle="modal"
+                        data-target="#importOrderModal">
+                        批量导入
+                    </button>
+                </div>
+                <div class="row">
+                    新建订单页面
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    {{template "order/_importOrder"}}
+</body>
+
+{{template "layout/footer"}}
+{{end}}

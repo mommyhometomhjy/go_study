@@ -42,12 +42,7 @@ type Order struct {
 	OrderReceiverMobilePhone string
 
 	// 订单明细
-	OrderDetailss []OrderDetails `gorm:"foreignkey:OrderId;association_foreignkey:OrderId"`
-}
-
-func CreateOrder(order *Order) {
-	db.Create(order)
-	db.Save(order)
+	OrderDetailss []OrderDetails
 }
 
 func CountOrderByOrderNo(orderNo string) (total int) {
@@ -93,7 +88,7 @@ func UpdateGoodsWeightReferOrder() {
 
 func GetOrders() []Order {
 	var orders []Order
-	db.Find(&orders)
+	db.Preload("OrderDetailss").Find(&orders)
 	return orders
 }
 func ParseOrderExcel(r io.Reader) (err error) {
@@ -140,6 +135,20 @@ func ParseOrderExcel(r io.Reader) (err error) {
 		//获取订单金额
 		ordermonkey, _ := strconv.ParseFloat(strings.Replace(row[8], "US $", "", -1), 64)
 
+		skuNumArray := strings.Split(row[11], ";")
+		var orderDetailss []OrderDetails
+
+		for _, skuNum := range skuNumArray {
+			goods := FindGoodsByGoodsNo(strings.Split(skuNum, " * ")[0])
+
+			number, _ := strconv.Atoi(strings.Split(skuNum, " * ")[1])
+			orderDetails := OrderDetails{
+				Goods:  goods,
+				Number: uint(number),
+			}
+			orderDetailss = append(orderDetailss, orderDetails)
+		}
+
 		order := Order{
 			//订单号
 			OrderNo: row[0],
@@ -168,21 +177,11 @@ func ParseOrderExcel(r io.Reader) (err error) {
 			OrderReceiverPostCode:    row[19],
 			OrderReceiverTelephone:   row[20],
 			OrderReceiverMobilePhone: row[21],
+			OrderDetailss:            orderDetailss,
 		}
-		CreateOrder(&order)
+		db.Create(&order)
+		// fmt.Println(order.OrderNo, len(order.OrderDetailss), order.OrderDetailss[0].Goods.GoodsNo)
 
-		skuNumArray := strings.Split(row[11], ";")
-		for _, skuNum := range skuNumArray {
-			goods := FindGoodsByGoodsNo(strings.Split(skuNum, " * ")[0])
-
-			number, _ := strconv.Atoi(strings.Split(skuNum, " * ")[1])
-			orderDetails := OrderDetails{
-				Order:  order,
-				Goods:  goods,
-				Number: uint(number),
-			}
-			CreateOrderDetails(&orderDetails)
-		}
 	}
 	return nil
 }

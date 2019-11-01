@@ -1,11 +1,21 @@
 {{define "order/_order"}}
 <tr>
+    <td>
+        {{range .OrderDetailss}}
+        {{.Goods.GoodsNo}} x {{if .Number gt 1}}<span style="color:red">{{.Number}}</span>{{else}}{{.Number}}{{end}}
+        {{end}}
+    </td>
+    <td>{{.OrderMoney}}</td>
+    <td>{{.OrderBuyer}} [{{.OrderReceiverCountry}}]</td>
     <td>{{.OrderNo}}</td>
-    <td>{{.OrderBuyer}}</td>
-    <td>{{.OrderReceiverCountry}}</td>
-    <td>{{.OrderShippingMethod}}</td>
-    <td>{{.OrderShippingNo}}</td>
-    <td>{{.OrderShippingStatus}}</td>
+    <td>
+        付款时间:{{.OrderPaidTime}}
+
+    </td>
+    <td>
+        {{.OrderShippingMethod}}<br />
+        {{.OrderShippingNo}}
+    </td>
     <td style="width:180px;text-align: center;">
         <div class="btn-group btn-group-xs" role="group">
             <button type="button" class="btn btn-default">详情</button>

@@ -31,3 +31,10 @@ func orderImportExcel(c echo.Context) error {
 	return orderIndexHandler(c)
 
 }
+
+func orderNewHandler(c echo.Context) error {
+	vop := vm.OrderViewModelOp{}
+	vm := vop.GetVM()
+	vm.SetTitle("新建订单")
+	return c.Render(http.StatusOK, "order/new", &vm)
+}

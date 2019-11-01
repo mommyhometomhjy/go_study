@@ -7,7 +7,6 @@ import (
 type OrderDetails struct {
 	gorm.Model
 	// 关联的订单id
-	Order   Order
 	OrderId uint
 
 	Goods   Goods
