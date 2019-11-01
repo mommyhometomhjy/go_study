@@ -88,7 +88,7 @@ func UpdateGoodsWeightReferOrder() {
 
 func GetOrders() []Order {
 	var orders []Order
-	db.Preload("OrderDetailss.Goods").Preload("OrderDetailss").Find(&orders)
+	db.Preload("OrderDetailss.Goods").Find(&orders)
 	return orders
 }
 func ParseOrderExcel(r io.Reader) (err error) {
