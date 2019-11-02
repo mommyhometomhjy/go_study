@@ -3,7 +3,6 @@ package router
 import (
 	"aliexpress/model"
 	"aliexpress/vm"
-	"fmt"
 	"net/http"
 
 	"github.com/labstack/echo"
@@ -42,13 +41,33 @@ func orderNewHandler(c echo.Context) error {
 }
 
 func orderCreate(c echo.Context) error {
+	type GoodsNoAndNumber struct {
+		GoodsNO []string `form:"GoodsNo"`
+		Number  []uint   `form:"Number"`
+	}
 	var order model.Order
-	goodsno := c.FormValue("GoodsNo")
-	fmt.Println(goodsno)
+	var goodss GoodsNoAndNumber
+	var orderDetailss []model.OrderDetails
+
+	if err := c.Bind(&goodss); err != nil {
+		return err
+	}
+	for index, goodsNo := range goodss.GoodsNO {
+		goods := model.FindGoodsByGoodsNo(goodsNo)
+
+		orderDetailss = append(orderDetailss, model.OrderDetails{
+			Goods:  goods,
+			Number: goodss.Number[index],
+		})
+	}
+
 	if err := c.Bind(&order); err != nil {
 		return err
 	}
+
+	order.OrderDetailss = orderDetailss
 	model.CreateOrder(&order)
+
 	vop := vm.OrderViewModelOp{}
 	vm := vop.GetVM()
 	err := c.Render(http.StatusOK, "order/index", &vm)
