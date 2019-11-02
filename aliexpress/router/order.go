@@ -4,6 +4,7 @@ import (
 	"aliexpress/model"
 	"aliexpress/vm"
 	"net/http"
+	"strconv"
 	"time"
 
 	"github.com/labstack/echo"
@@ -11,7 +12,7 @@ import (
 
 func orderIndexHandler(c echo.Context) error {
 	vop := vm.OrderViewModelOp{}
-	vm := vop.GetVM()
+	vm := vop.OrderGetIndexVM()
 	err := c.Render(http.StatusOK, "order/index", &vm)
 	// fmt.Println(err)
 	return err
@@ -35,9 +36,9 @@ func orderImportExcel(c echo.Context) error {
 }
 
 func orderNewHandler(c echo.Context) error {
+
 	vop := vm.OrderViewModelOp{}
-	vm := vop.GetVM()
-	vm.SetTitle("新建订单")
+	vm := vop.OrderGetNewVM()
 	return c.Render(http.StatusOK, "order/new", &vm)
 }
 
@@ -72,7 +73,14 @@ func orderCreate(c echo.Context) error {
 	model.CreateOrder(&order)
 
 	vop := vm.OrderViewModelOp{}
-	vm := vop.GetVM()
+	vm := vop.OrderGetIndexVM()
 	err := c.Render(http.StatusOK, "order/index", &vm)
 	return err
+}
+
+func orderDelete(c echo.Context) error {
+	id, _ := strconv.Atoi(c.Param("id"))
+
+	model.DeleteOrderById(id)
+	return c.String(200, "successed")
 }

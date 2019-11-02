@@ -224,3 +224,10 @@ func ParseShippingCost() {
 func CreateOrder(order *Order) {
 	db.Create(order)
 }
+
+func DeleteOrderById(id int) {
+	var order Order
+
+	db.First(&order, id)
+	db.Delete(&order)
+}

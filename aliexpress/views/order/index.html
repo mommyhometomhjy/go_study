@@ -21,8 +21,6 @@
                     </div>
                     <div class="col-md-1">
                         <button type="button" class="btn btn-default">批量导入运费</button>
-
-
                     </div>
                 </div>
                 <table class="table">
@@ -38,6 +36,28 @@
                     {{range .Orders}}
                     {{template "order/_order" .}}
                     {{end}}
+                    <script>
+                        $(document).ready(function () {
+                            $(".deleteorderbutton").click(function () {
+                                var self=$(this)
+                                var id = self.attr("data-id")
+                                layer.confirm('确认删除吗？', {
+                                    btn: ['确认', '取消'] 
+                                }, function () {
+                                    
+                                    $.post("/order/" + id + "/delete",function (resp) {
+                                            layer.msg(resp)
+                                            self.parentsUntil("tr").parent().remove()
+                                        }
+                                    )
+                                }, function () {});
+
+                            })
+                            $(".editorderbutton").click(function () {
+                                console.log("编辑订单")
+                            })
+                        })
+                    </script>
                 </table>
             </div>
         </div>

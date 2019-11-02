@@ -2,7 +2,8 @@
 <tr>
     <td>
         {{range .OrderDetailss}}
-        {{.Goods.GoodsNo}} x {{if gt .Number 1}}<span style="color:red">{{.Number}}</span>{{else}}{{.Number}}{{end}}<br/>
+        {{.Goods.GoodsNo}} x {{if gt .Number 1}}<span
+            style="color:red">{{.Number}}</span>{{else}}{{.Number}}{{end}}<br />
         {{end}}
     </td>
     <td>{{.OrderMoney}}</td>
@@ -18,8 +19,8 @@
     </td>
     <td style="width:180px;text-align: center;">
         <div class="btn-group btn-group-xs" role="group">
-            <button type="button" class="btn btn-default">编辑</button>
-            <button type="button" class="btn btn-default">删除</button>
+            <button type="button" class="btn btn-default editorderbutton" data-id="{{.ID}}">编辑</button>
+            <button type="button" class="btn btn-default deleteorderbutton" data-id="{{.ID}}">删除</button>
         </div>
     </td>
 </tr>
