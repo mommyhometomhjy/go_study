@@ -14,32 +14,32 @@ import (
 type Order struct {
 	gorm.Model
 	// 订单号
-	OrderNo string `gorm:"UNIQUE"`
+	OrderNo string `gorm:"UNIQUE";form:"OrderNo"`
 
 	// 物流方式,物流单号,物流状态,物流花费,包裹重量,签收耗时
-	OrderShippingMethod        string
-	OrderShippingNo            string `gorm:"INDEX:shippingnno"`
+	OrderShippingMethod        string `form:"OrderShippingMethod"`
+	OrderShippingNo            string `gorm:"INDEX:shippingnno";form:"OrderShippingNo"`
 	OrderShippingStatus        string
 	OrderShippingCost          float64
 	OrderShippingWeight        float64
 	OrderShippingDeliveredDays uint
 
 	// 买家昵称
-	OrderBuyer string
+	OrderBuyer string `form:"OrderBuyer"`
 
 	// 付款时间,付款金额
 	OrderPaidTime *time.Time
-	OrderMoney    float64
+	OrderMoney    float64 `form:"OrderMoney"`
 
 	// 收件人名称,国家,省份,城市,地址,右边,电话,手机
-	OrderReceiverName        string
-	OrderReceiverCountry     string
-	OrderReceiverProvince    string
-	OrderReceiverCity        string
-	OrderReceiverAddress     string
-	OrderReceiverPostCode    string
-	OrderReceiverTelephone   string
-	OrderReceiverMobilePhone string
+	OrderReceiverName        string `form:"OrderReceiverName"`
+	OrderReceiverCountry     string `form:"OrderReceiverCountry"`
+	OrderReceiverProvince    string `form:"OrderReceiverProvince"`
+	OrderReceiverCity        string `form:"OrderReceiverCity"`
+	OrderReceiverAddress     string `form:"OrderReceiverAddress"`
+	OrderReceiverPostCode    string `form:"OrderReceiverPostCode"`
+	OrderReceiverTelephone   string `form:"OrderReceiverTelephone"`
+	OrderReceiverMobilePhone string `form:"OrderReceiverMobilePhone"`
 
 	// 订单明细
 	OrderDetailss []OrderDetails
@@ -219,4 +219,8 @@ func ParseShippingCost() {
 
 	UpdateGoodsWeightReferOrder()
 	UpdateGoodsPrice()
+}
+
+func CreateOrder(order *Order) {
+	db.Create(order)
 }

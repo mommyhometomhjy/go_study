@@ -12,7 +12,7 @@ type OrderDetails struct {
 	Goods   Goods
 	GoodsId uint
 	//当前产品的数量
-	Number uint
+	Number uint `form:"Number"`
 }
 
 func CreateOrderDetails(orderDetails *OrderDetails) {

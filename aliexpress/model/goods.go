@@ -13,7 +13,7 @@ import (
 type Goods struct {
 	gorm.Model
 	// 产品sku
-	GoodsNo string `gorm:"UNIQUE"`
+	GoodsNo string `gorm:"UNIQUE";form:"GoodsNo"`
 
 	// 速卖通id
 	AliexpressId string

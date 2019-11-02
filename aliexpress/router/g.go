@@ -45,4 +45,5 @@ func registerRouter() {
 	e.GET("/order", orderIndexHandler)
 	e.GET("/order/new", orderNewHandler)
 	e.POST("/import/order", orderImportExcel)
+	e.POST("/order", orderCreate)
 }
