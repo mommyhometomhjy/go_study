@@ -4,6 +4,7 @@ import (
 	"aliexpress/model"
 	"aliexpress/vm"
 	"net/http"
+	"time"
 
 	"github.com/labstack/echo"
 )
@@ -66,6 +67,8 @@ func orderCreate(c echo.Context) error {
 	}
 
 	order.OrderDetailss = orderDetailss
+	t := time.Now()
+	order.OrderPaidTime = &t
 	model.CreateOrder(&order)
 
 	vop := vm.OrderViewModelOp{}
