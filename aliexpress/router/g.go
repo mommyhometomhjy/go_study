@@ -42,9 +42,14 @@ func StartUp() {
 func registerRouter() {
 	e.GET("/", indexHandler)
 
+	e.POST("/import/order", orderImportExcel)
+
 	e.GET("/order", orderIndexHandler)
 	e.GET("/order/new", orderNewHandler)
-	e.POST("/import/order", orderImportExcel)
 	e.POST("/order", orderCreate)
+
 	e.POST("/order/:id/delete", orderDelete)
+
+	e.GET("/order/:id/edit", orderEditHandler)
+	e.POST("/order/:id/edit", orderUpdate)
 }

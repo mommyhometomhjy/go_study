@@ -7,11 +7,10 @@ import (
 	"strings"
 
 	"github.com/360EntSecGroup-Skylar/excelize"
-	"github.com/jinzhu/gorm"
 )
 
 type Goods struct {
-	gorm.Model
+	ID int `gorm:"PRIMARY_KEY"`
 	// 产品sku
 	GoodsNo string `gorm:"UNIQUE";form:"GoodsNo"`
 

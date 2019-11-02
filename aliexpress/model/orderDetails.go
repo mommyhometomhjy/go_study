@@ -1,11 +1,7 @@
 package model
 
-import (
-	"github.com/jinzhu/gorm"
-)
-
 type OrderDetails struct {
-	gorm.Model
+	ID int `gorm:"PRIMARY_KEY"`
 	// 关联的订单id
 	OrderId uint
 
@@ -17,4 +13,9 @@ type OrderDetails struct {
 
 func CreateOrderDetails(orderDetails *OrderDetails) {
 	db.Create(orderDetails)
+}
+func DeleteOrderDetailsByOrderId(orderId int) {
+
+	db.Where("order_id=? ", orderId).Delete(OrderDetails{})
+
 }

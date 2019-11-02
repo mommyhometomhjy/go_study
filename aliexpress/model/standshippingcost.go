@@ -1,9 +1,7 @@
 package model
 
-import "github.com/jinzhu/gorm"
-
 type StandShippingCost struct {
-	gorm.Model
+	ID     int `gorm:"PRIMARY_KEY"`
 	Weight string
 	Price  float64
 }

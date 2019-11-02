@@ -39,18 +39,22 @@
                     <script>
                         $(document).ready(function () {
                             $(".deleteorderbutton").click(function () {
-                                var self=$(this)
+                                var self = $(this)
                                 var id = self.attr("data-id")
                                 layer.confirm('确认删除吗？', {
-                                    btn: ['确认', '取消'] 
+                                    btn: ['确认']
                                 }, function () {
-                                    
-                                    $.post("/order/" + id + "/delete",function (resp) {
-                                            layer.msg(resp)
-                                            self.parentsUntil("tr").parent().remove()
-                                        }
+
+                                    $.post("/order/" + id + "/delete", function (resp) {
+                                        layer.msg(resp, {
+                                            offset: 't',
+                                            time: 2000,
+                                            anim:1
+                                        })
+                                        self.parentsUntil("tr").parent().remove()
+                                    }
                                     )
-                                }, function () {});
+                                });
 
                             })
                             $(".editorderbutton").click(function () {

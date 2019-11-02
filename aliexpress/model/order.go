@@ -8,11 +8,10 @@ import (
 	"time"
 
 	"github.com/360EntSecGroup-Skylar/excelize"
-	"github.com/jinzhu/gorm"
 )
 
 type Order struct {
-	gorm.Model
+	ID int `gorm:"PRIMARY_KEY"`
 	// 订单号
 	OrderNo string `gorm:"UNIQUE";form:"OrderNo"`
 
@@ -230,4 +229,10 @@ func DeleteOrderById(id int) {
 
 	db.First(&order, id)
 	db.Delete(&order)
+}
+func GetOrderById(id int) Order {
+	var order Order
+
+	db.Preload("OrderDetailss.Goods").First(&order, id)
+	return order
 }

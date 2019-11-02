@@ -3,6 +3,7 @@ package router
 import (
 	"aliexpress/model"
 	"aliexpress/vm"
+	"fmt"
 	"net/http"
 	"strconv"
 	"time"
@@ -14,7 +15,9 @@ func orderIndexHandler(c echo.Context) error {
 	vop := vm.OrderViewModelOp{}
 	vm := vop.OrderGetIndexVM()
 	err := c.Render(http.StatusOK, "order/index", &vm)
-	// fmt.Println(err)
+	if err != nil {
+		fmt.Println(err)
+	}
 	return err
 }
 
@@ -83,4 +86,48 @@ func orderDelete(c echo.Context) error {
 
 	model.DeleteOrderById(id)
 	return c.String(200, "successed")
+}
+
+func orderEditHandler(c echo.Context) error {
+	id, _ := strconv.Atoi(c.Param("id"))
+	vop := vm.OrderViewModelOp{}
+	vm := vop.OrderGetEditVM(id)
+	err := c.Render(http.StatusOK, "order/edit", &vm)
+	if err != nil {
+		fmt.Println(err)
+	}
+	return err
+
+}
+
+func orderUpdate(c echo.Context) error {
+	id, _ := strconv.Atoi(c.Param("id"))
+	order := model.GetOrderById(id)
+
+	if err := c.Bind(&order); err != nil {
+		return err
+	}
+	type GoodsNoAndNumber struct {
+		GoodsNO []string `form:"GoodsNo"`
+		Number  []uint   `form:"Number"`
+	}
+
+	var goodss GoodsNoAndNumber
+	var orderDetailss []model.OrderDetails
+
+	if err := c.Bind(&goodss); err != nil {
+		return err
+	}
+	for index, goodsNo := range goodss.GoodsNO {
+		goods := model.FindGoodsByGoodsNo(goodsNo)
+
+		orderDetailss = append(orderDetailss, model.OrderDetails{
+			Goods:  goods,
+			Number: goodss.Number[index],
+		})
+	}
+	model.DeleteOrderDetailsByOrderId(id)
+	order.OrderDetailss = orderDetailss
+	model.UpdateOrder(&order)
+	return orderEditHandler(c)
 }

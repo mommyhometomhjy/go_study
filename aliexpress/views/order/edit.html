@@ -1,0 +1,186 @@
+{{define "order/edit"}}
+{{template "layout/header" .}}
+
+<body>
+    <div class="container-fluid">
+        {{template "layout/nav"}}
+        <div class="row">
+            <div class="col-md-2">
+                {{template "order/_aside"}}
+            </div>
+            <div class="col-md-10">
+
+                <div class="row">
+                    <form class="form-horizontal" action="/order/{{.Order.ID}}/edit" method="POST">
+
+                        <div class="form-group">
+                            <label for="OrderNo" class="col-sm-2 control-label">订单号:</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" name="OrderNo" value="{{.Order.OrderNo}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="OrderBuyer" class="col-sm-2 control-label">买家网名:</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" name="OrderBuyer" value="{{.Order.OrderNo}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="OrderReceiverName" class="col-sm-2 control-label">收件人:</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" name="OrderReceiverName"
+                                    value="{{.Order.OrderReceiverName}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="OrderReceiverCountry" class="col-sm-2 control-label">国家:</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" name="OrderReceiverCountry"
+                                    value="{{.Order.OrderReceiverCountry}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="OrderReceiverProvince" class="col-sm-2 control-label">州/省:</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" name="OrderReceiverProvince"
+                                    value="{{.Order.OrderReceiverProvince}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="OrderReceiverCity" class="col-sm-2 control-label">城市:</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" name="OrderReceiverCity"
+                                    value="{{.Order.OrderReceiverCity}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="OrderReceiverAddress" class="col-sm-2 control-label">地址:</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" name="OrderReceiverAddress"
+                                    value="{{.Order.OrderReceiverAddress}}">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="OrderReceiverPostCode" class="col-sm-2 control-label">邮编:</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" name="OrderReceiverPostCode"
+                                    value="{{.Order.OrderReceiverPostCode}}">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="OrderReceiverTelephone" class="col-sm-2 control-label">电话:</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" name="OrderReceiverTelephone"
+                                    value="{{.Order.OrderReceiverTelephone}}">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="OrderReceiverMobilePhone" class="col-sm-2 control-label">手机:</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" name="OrderReceiverMobilePhone"
+                                    value="{{.Order.OrderReceiverMobilePhone}}">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="OrderShippingMethod" class="col-sm-2 control-label">物流方式:</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" name="OrderShippingMethod"
+                                    value="{{.Order.OrderShippingMethod}}">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="OrderShippingNo" class="col-sm-2 control-label">物流单号:</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" name="OrderShippingNo"
+                                    value="{{.Order.OrderShippingNo}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="OrderMoney" class="col-sm-2 control-label">订单金额:</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" name="OrderMoney" value="{{.Order.OrderMoney}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group" id="orderdetailss">
+                            <div class="row">
+                                <div class="col-sm-offset-2 col-sm-2">
+                                    <label class="control-label">商品:</label>
+                                </div>
+
+                                <div class="col-sm-4 text-right">
+                                    <a class="btn btn-default " id="orderdetailsaddbutton">新增</a>
+                                </div>
+                            </div>
+                            <hr />
+                            {{range .Order.OrderDetailss}}
+                            <div class="orderdetail row">
+                                <div class="col-sm-offset-2 col-sm-3">
+                                    <input type="text" class="form-control" name="GoodsNo" placeholder="sku"
+                                        value="{{.Goods.GoodsNo}}">
+                                </div>
+                                <div class="col-sm-2">
+                                    <input type="number" class="form-control" name="Number" placeholder="数量"
+                                        value="{{.Number}}">
+                                </div>
+                                <div class="col-sm-1">
+                                    <a class="btn btn-default col-sm-offset-8 orderdetailsdeletebutton">删除</a>
+                                </div>
+
+                            </div>
+                            {{end}}
+                        </div>
+                        <script>
+                            $(document).ready(function () {
+                                $("#orderdetailsaddbutton").click(function () {
+                                    $("#orderdetailss").append(`
+                                    <div class="orderdetail row">
+                                        <div class="col-sm-offset-2 col-sm-3">
+                                            <input type="text" class="form-control" name="GoodsNo" placeholder="sku">
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <input type="number" class="form-control" name="Number" placeholder="数量">
+                                        </div>
+                                        <div class="col-sm-1">
+                                            <a class="btn btn-default col-sm-offset-8 orderdetailsdeletebutton">删除</a>
+                                        </div>
+                                        
+                                    </div>
+                                    `)
+                                    $(".orderdetailsdeletebutton").click(function () {
+                                        $(this).parent().parent().remove()
+                                    })
+                                })
+
+                                $(".orderdetailsdeletebutton").click(function () {
+                                    $(this).parent().parent().remove()
+                                })
+                            })
+                        </script>
+
+                        <div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-10">
+                                <button type="submit" class="btn btn-default">保存</button>
+                                <button type="reset" class="btn btn-default">撤销</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    {{template "order/_importOrder"}}
+</body>
+
+{{template "layout/footer"}}
+{{end}}
