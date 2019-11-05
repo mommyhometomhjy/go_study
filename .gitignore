@@ -12,3 +12,6 @@
 *.out
 *.log
 *.xlsx
+main
+*.xlsx
+*.db
