@@ -8,44 +8,41 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/labstack/echo"
+	"github.com/gin-gonic/gin"
 )
 
-func orderIndexHandler(c echo.Context) error {
+func orderIndexHandler(c *gin.Context) {
 	vop := vm.OrderViewModelOp{}
 	vm := vop.OrderGetIndexVM()
-	err := c.Render(http.StatusOK, "order/index", &vm)
-	if err != nil {
-		fmt.Println(err)
-	}
-	return err
+	c.HTML(http.StatusOK, "order/index", &vm)
+
 }
 
-func orderImportExcel(c echo.Context) error {
+func orderImportExcel(c *gin.Context) {
 	file, err := c.FormFile("file")
 	if err != nil {
-		return err
+		fmt.Println(err)
 	}
 	// fmt.Println(file.Filename)
 	src, err := file.Open()
 	if err != nil {
 		// fmt.Println(err)
-		return err
+		fmt.Println(err)
 	}
 	defer src.Close()
 	model.ParseOrderExcel(src)
-	return orderIndexHandler(c)
+	orderIndexHandler(c)
 
 }
 
-func orderNewHandler(c echo.Context) error {
+func orderNewHandler(c *gin.Context) {
 
 	vop := vm.OrderViewModelOp{}
 	vm := vop.OrderGetNewVM()
-	return c.Render(http.StatusOK, "order/new", &vm)
+	c.HTML(http.StatusOK, "order/new", &vm)
 }
 
-func orderCreate(c echo.Context) error {
+func orderCreate(c *gin.Context) {
 	type GoodsNoAndNumber struct {
 		GoodsNO []string `form:"GoodsNo"`
 		Number  []uint   `form:"Number"`
@@ -55,7 +52,7 @@ func orderCreate(c echo.Context) error {
 	var orderDetailss []model.OrderDetails
 
 	if err := c.Bind(&goodss); err != nil {
-		return err
+		fmt.Println(err)
 	}
 	for index, goodsNo := range goodss.GoodsNO {
 		goods := model.FindGoodsByGoodsNo(goodsNo)
@@ -67,7 +64,7 @@ func orderCreate(c echo.Context) error {
 	}
 
 	if err := c.Bind(&order); err != nil {
-		return err
+		fmt.Println(err)
 	}
 
 	order.OrderDetailss = orderDetailss
@@ -77,35 +74,31 @@ func orderCreate(c echo.Context) error {
 
 	vop := vm.OrderViewModelOp{}
 	vm := vop.OrderGetIndexVM()
-	err := c.Render(http.StatusOK, "order/index", &vm)
-	return err
+	c.HTML(http.StatusOK, "order/index", &vm)
+
 }
 
-func orderDelete(c echo.Context) error {
+func orderDelete(c *gin.Context) {
 	id, _ := strconv.Atoi(c.Param("id"))
 
 	model.DeleteOrderById(id)
-	return c.String(200, "successed")
+	c.String(200, "successed")
 }
 
-func orderEditHandler(c echo.Context) error {
+func orderEditHandler(c *gin.Context) {
 	id, _ := strconv.Atoi(c.Param("id"))
 	vop := vm.OrderViewModelOp{}
 	vm := vop.OrderGetEditVM(id)
-	err := c.Render(http.StatusOK, "order/edit", &vm)
-	if err != nil {
-		fmt.Println(err)
-	}
-	return err
+	c.HTML(http.StatusOK, "order/edit", &vm)
 
 }
 
-func orderUpdate(c echo.Context) error {
+func orderUpdate(c *gin.Context) {
 	id, _ := strconv.Atoi(c.Param("id"))
 	order := model.GetOrderById(id)
 
 	if err := c.Bind(&order); err != nil {
-		return err
+		fmt.Println(err)
 	}
 	type GoodsNoAndNumber struct {
 		GoodsNO []string `form:"GoodsNo"`
@@ -116,7 +109,7 @@ func orderUpdate(c echo.Context) error {
 	var orderDetailss []model.OrderDetails
 
 	if err := c.Bind(&goodss); err != nil {
-		return err
+		fmt.Println(err)
 	}
 	for index, goodsNo := range goodss.GoodsNO {
 		goods := model.FindGoodsByGoodsNo(goodsNo)
@@ -129,5 +122,5 @@ func orderUpdate(c echo.Context) error {
 	model.DeleteOrderDetailsByOrderId(id)
 	order.OrderDetailss = orderDetailss
 	model.UpdateOrder(&order)
-	return orderEditHandler(c)
+	orderEditHandler(c)
 }

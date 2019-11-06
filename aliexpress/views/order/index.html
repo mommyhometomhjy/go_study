@@ -45,7 +45,7 @@
                                     btn: ['确认']
                                 }, function () {
 
-                                    $.post("/order/" + id + "/delete", function (resp) {
+                                    $.post("/order/delete/" + id, function (resp) {
                                         layer.msg(resp, {
                                             offset: 't',
                                             time: 2000,

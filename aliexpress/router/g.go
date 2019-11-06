@@ -1,55 +1,57 @@
 package router
 
 import (
-	"html/template"
-	"io"
-
-	"github.com/labstack/echo"
+	"github.com/gin-gonic/gin"
 )
 
-var e *echo.Echo
-
-type Template struct {
-	templates *template.Template
-}
-
-func (t *Template) Render(w io.Writer, name string, data interface{}, c echo.Context) error {
-	return t.templates.ExecuteTemplate(w, name, data)
-}
+var e *gin.Engine
 
 func init() {
 
-	e = echo.New()
+	e = gin.Default()
 
 	//静态文件,直接/static访问
 	e.Static("/static", "static")
-
+	e.Use(gin.Logger())
 	//设置输出日志
 	// e.Use(middleware.Logger())
-
+	e.LoadHTMLGlob("views/*/*.html")
 	//绑定模板
-	t := &Template{
-		templates: template.Must(template.ParseGlob("views/*/*.html")),
-	}
-	e.Renderer = t
+
 }
 func StartUp() {
 
 	registerRouter()
-	e.Logger.Fatal(e.Start(":1323"))
+	e.Run(":1323")
 }
 
 func registerRouter() {
-	e.GET("/", indexHandler)
 
-	e.POST("/import/order", orderImportExcel)
+	index := e.Group("/index")
+	{
+		index.GET("/", indexHandler)
+	}
 
-	e.GET("/order", orderIndexHandler)
-	e.GET("/order/new", orderNewHandler)
-	e.POST("/order", orderCreate)
+	order := e.Group("/order")
+	{
+		//获取全部order
+		order.GET("/index", orderIndexHandler)
 
-	e.POST("/order/:id/delete", orderDelete)
+		//创建Order页面
+		order.GET("/new", orderNewHandler)
+		//创建order
+		order.POST("/new", orderCreate)
 
-	e.GET("/order/:id/edit", orderEditHandler)
-	e.POST("/order/:id/edit", orderUpdate)
+		//删除order
+		order.POST("/delete/:id", orderDelete)
+
+		//获取指定order
+		order.GET("/edit/:id", orderEditHandler)
+		//修改指定order
+		order.POST("/edit/:id", orderUpdate)
+
+		//批量导入order
+		order.POST("/import", orderImportExcel)
+	}
+
 }

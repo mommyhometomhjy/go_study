@@ -4,11 +4,11 @@ import (
 	"aliexpress/vm"
 	"net/http"
 
-	"github.com/labstack/echo"
+	"github.com/gin-gonic/gin"
 )
 
-func indexHandler(c echo.Context) error {
+func indexHandler(c *gin.Context) {
 	vop := vm.IndexViewModelOp{}
 	vm := vop.GetVM()
-	return c.Render(http.StatusOK, "index", &vm)
+	c.HTML(http.StatusOK, "index", &vm)
 }
