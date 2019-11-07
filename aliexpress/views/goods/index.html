@@ -9,12 +9,81 @@
                 {{template "goods/_aside"}}
             </div>
             <div class="col-md-10">
-                产品列表
+                <div class="row">
+                    <div class="col-sm-1">
+                        <button type="button" class="btn btn-primary btn-lg" data-toggle="modal"
+                            data-target="#standardshipping">
+                            导入标准运费
+                        </button>
+                    </div>
+                </div>
+                <table class="table">
+                    <tr>
+                        <th>速卖通id</th>
+                        <th>货号</th>
+                        <th>成本价</th>
+                        <th>重量</th>
+                        <th>售价</th>
+                        <th>上次售价</th>
+                        <th>链接</th>
+                        <th style="width:180px;text-align: center;">操作</th>
+                    </tr>
+                    {{range .Goodss}}
+                    <tr>
+                        <td>{{.AliexpressId}}</td>
+                        <td>{{.GoodsNo}}</td>
+                        <td>{{.GoodsPrice}}</td>
+                        <td>{{.GoodsWeight}}</td>
+                        <td>{{.GoodsSellPrice}}</td>
+                        <td>{{.GoodsLastSellPrice}}</td>
+                        <td>
+                            {{if .GoodsSupplierLink}}
+                            <a href="{{.GoodsSupplierLink}}" target="_blank">货源</a>
+                            {{end}}
+                        </td>
+                        <td style="width:180px;text-align: center;">
+                            <div class="btn-group btn-group-xs" role="group">
+                                <a class="btn btn-default editgoodsbutton" href="/goods/edit/{{.ID}}"
+                                    target="_blank">编辑</a>
+                                <button class="btn btn-default deletegoodsbutton" data-id="{{.ID}}">删除</button>
+                            </div>
+                        </td>
+                    </tr>
+                    {{end}}
+                    <script>
+                        $(document).ready(function () {
+                            $(".deletegoodsbutton").click(function () {
+                                var self = $(this)
+                                var id = self.attr("data-id")
+                                layer.confirm('确认删除吗？', {
+                                    btn: ['确认']
+                                }, function () {
+
+                                    $.post("/goods/delete/" + id, function (resp) {
+                                        layer.msg(resp, {
+                                            offset: 't',
+                                            time: 2000,
+                                            anim: 1
+                                        })
+                                        if (resp == "删除成功") {
+                                            self.parentsUntil("tr").parent().remove()
+                                        }
+
+                                    }
+                                    )
+                                });
+
+                            })
+
+                        })
+                    </script>
+                </table>
             </div>
         </div>
 
 
     </div>
+    {{template "goods/_standardshipping"}}
 </body>
 
 {{template "layout/footer"}}

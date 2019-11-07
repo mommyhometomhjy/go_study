@@ -2,6 +2,7 @@ package model
 
 import (
 	"fmt"
+	"io"
 	"math"
 	"strconv"
 	"strings"
@@ -28,6 +29,9 @@ type Goods struct {
 
 	//上次售价
 	GoodsLastSellPrice float64
+
+	//供应商
+	GoodsSupplierLink string
 }
 
 func FindGoodsByGoodsNo(goodsNo string) Goods {
@@ -36,26 +40,31 @@ func FindGoodsByGoodsNo(goodsNo string) Goods {
 	return goods
 }
 func UpdateGoods(goods *Goods) {
-	db.Save(goods)
-}
-func UpdateGoodsPrice() {
-	var goodss []Goods
-	percent, exchange := 0.857, 7.0
-	db.Where("goods_weight >0").Find(&goodss)
-	for _, goods := range goodss {
 
+	if goods.GoodsWeight > 0 && goods.GoodsPrice > 0 {
+		percent, exchange := 0.857, 7.0
 		w := fmt.Sprintf("%d", int(math.Ceil(goods.GoodsWeight/10.0)*10))
 
 		standShippingCost := GetPriceByWeight(w)
 		goods.GoodsLastSellPrice = goods.GoodsSellPrice
 		goods.GoodsSellPrice = math.Ceil((goods.GoodsPrice+3+standShippingCost)/percent/exchange) - 0.01
-		db.Save(goods)
+
+	}
+
+	db.Save(goods)
+}
+func UpdateGoodsPrice() {
+	var goodss []Goods
+	db.Where("goods_weight >0 and goods_price >0").Find(&goodss)
+	for _, goods := range goodss {
+		UpdateGoods(&goods)
+
 	}
 }
 
 func GetGoodsIncludeSellPriceAndAliexpressId() []Goods {
 	var goodss []Goods
-	db.Where("goods_sell_price <>goods_last_sell_price and aliexpress_id <>''").Order("goods_no").Find(&goodss)
+	db.Where("goods_sell_price <>goods_last_sell_price").Order("goods_no").Find(&goodss)
 	return goodss
 }
 func ParseGoodsExcel() {
@@ -146,4 +155,42 @@ func GetGoodsById(id int) Goods {
 	var goods Goods
 	db.First(&goods, id)
 	return goods
+}
+
+func CreateGoods(goods *Goods) {
+	db.Create(goods)
+}
+
+func ParseStandardShippingExcel(r io.Reader) (err error) {
+	DeleteStandShippingCost()
+	f, err := excelize.OpenReader(r)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	rows := f.GetRows("Worksheet1")
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	for index, row := range rows {
+		if index == 0 {
+			continue
+		}
+		weight := row[0]
+		price, _ := strconv.ParseFloat(row[1], 64)
+		s := StandShippingCost{
+			Weight: weight,
+			Price:  price,
+		}
+		db.Create(&s)
+	}
+	return nil
+}
+
+func DeleteGoodsById(id int) {
+	var goods Goods
+	db.First(&goods, id)
+
+	db.Delete(&goods)
 }

@@ -1,0 +1,26 @@
+{{define "goods/_standardshipping"}}
+<div class="modal fade" id="standardshipping" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+            aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">批量导入订单</h4>
+      </div>
+      <div class="modal-body">
+        <form action="/goods/importstandardshippingcost" method="POST" enctype="multipart/form-data" id="import_order_from">
+          <div class="form-group">
+            <label for="exampleInputEmail1">选择文件:</label>
+            <input type="file" class="form-control" id="file" name="file">
+          </div>
+          <div class="form-group">
+            <a href="/static/templates/标准运费.xlsx">下载模板</a>
+          </div>
+          <button type="submit" class="btn btn-default">提交</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+{{end}}

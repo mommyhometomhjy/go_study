@@ -20,3 +20,11 @@ func GetPriceByWeight(weight string) float64 {
 	db.Where("weight =?", weight).Find(&s)
 	return s.Price
 }
+
+func CreateShippingCost(s *StandShippingCost) {
+	db.Create(s)
+}
+func DeleteStandShippingCost() {
+	s := StandShippingCost{}
+	db.Delete(&s)
+}

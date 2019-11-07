@@ -19,3 +19,13 @@ func DeleteOrderDetailsByOrderId(orderId int) {
 	db.Where("order_id=? ", orderId).Delete(OrderDetails{})
 
 }
+
+func OrderDetailsHasGoods(id int) bool {
+	var o []OrderDetails
+	var count int
+	db.Where("goods_id = ?", id).Find(&o).Count(&count)
+	if count > 0 {
+		return true
+	}
+	return false
+}

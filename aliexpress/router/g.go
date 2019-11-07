@@ -62,14 +62,16 @@ func registerRouter() {
 		//创建goods页面
 		goods.GET("/new", goodsNew)
 		//创建goods
-		// goods.POST("/new", goodsCreate)
+		goods.POST("/new", goodsCreate)
 
-		// //删除goods
-		// goods.POST("/delete/:id", goodsDelete)
+		//删除goods
+		goods.POST("/delete/:id", goodsDelete)
 
 		//获取指定goods
 		goods.GET("/edit/:id", goodsEdit)
 		// //修改指定goods
-		// goods.POST("/edit/:id", goodsUpdate)
+		goods.POST("/edit/:id", goodsUpdate)
+
+		goods.POST("/importstandardshippingcost", parseStandardShippingCost)
 	}
 }
