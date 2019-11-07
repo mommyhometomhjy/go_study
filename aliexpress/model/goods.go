@@ -135,3 +135,15 @@ func ExportGoodsIncludePrice() {
 		fmt.Println(err)
 	}
 }
+
+func GetGoodss() []Goods {
+	var goodss []Goods
+	db.Find(&goodss)
+	return goodss
+}
+
+func GetGoodsById(id int) Goods {
+	var goods Goods
+	db.First(&goods, id)
+	return goods
+}

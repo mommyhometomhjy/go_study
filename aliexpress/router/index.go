@@ -1,14 +1,13 @@
 package router
 
 import (
-	"aliexpress/vm"
-	"net/http"
-
 	"github.com/gin-gonic/gin"
 )
 
 func indexHandler(c *gin.Context) {
-	vop := vm.IndexViewModelOp{}
-	vm := vop.GetVM()
-	c.HTML(http.StatusOK, "index", &vm)
+
+	c.HTML(200, "index", gin.H{
+		"Title": "Homepage",
+		"Words": "你好",
+	})
 }

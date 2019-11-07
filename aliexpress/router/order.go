@@ -2,9 +2,7 @@ package router
 
 import (
 	"aliexpress/model"
-	"aliexpress/vm"
 	"fmt"
-	"net/http"
 	"strconv"
 	"time"
 
@@ -12,9 +10,12 @@ import (
 )
 
 func orderIndexHandler(c *gin.Context) {
-	vop := vm.OrderViewModelOp{}
-	vm := vop.OrderGetIndexVM()
-	c.HTML(http.StatusOK, "order/index", &vm)
+
+	orders := model.GetOrders()
+	c.HTML(200, "order/index", gin.H{
+		"Title":  "订单列表",
+		"Orders": orders,
+	})
 
 }
 
@@ -37,9 +38,9 @@ func orderImportExcel(c *gin.Context) {
 
 func orderNewHandler(c *gin.Context) {
 
-	vop := vm.OrderViewModelOp{}
-	vm := vop.OrderGetNewVM()
-	c.HTML(http.StatusOK, "order/new", &vm)
+	c.HTML(200, "order/new", gin.H{
+		"Title": "新建订单",
+	})
 }
 
 func orderCreate(c *gin.Context) {
@@ -72,9 +73,7 @@ func orderCreate(c *gin.Context) {
 	order.OrderPaidTime = &t
 	model.CreateOrder(&order)
 
-	vop := vm.OrderViewModelOp{}
-	vm := vop.OrderGetIndexVM()
-	c.HTML(http.StatusOK, "order/index", &vm)
+	orderIndexHandler(c)
 
 }
 
@@ -87,9 +86,12 @@ func orderDelete(c *gin.Context) {
 
 func orderEditHandler(c *gin.Context) {
 	id, _ := strconv.Atoi(c.Param("id"))
-	vop := vm.OrderViewModelOp{}
-	vm := vop.OrderGetEditVM(id)
-	c.HTML(http.StatusOK, "order/edit", &vm)
+	order := model.GetOrderById(id)
+
+	c.HTML(200, "order/edit", gin.H{
+		"Titile": "编辑订单",
+		"Order":  order,
+	})
 
 }
 

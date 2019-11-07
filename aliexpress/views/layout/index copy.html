@@ -1,0 +1,21 @@
+{{define ""}}
+{{template "layout/header" .}}
+
+<body>
+    <div class="container-fluid">
+        {{template "layout/nav"}}
+        <div class="row">
+            <div class="col-md-2">
+                分页菜单
+            </div>
+            <div class="col-md-10">
+                产品列表
+            </div>
+        </div>
+
+
+    </div>
+</body>
+
+{{template "layout/footer"}}
+{{end}}

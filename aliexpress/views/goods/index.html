@@ -1,0 +1,21 @@
+{{define "goods/index"}}
+{{template "layout/header" .}}
+
+<body>
+    <div class="container-fluid">
+        {{template "layout/nav"}}
+        <div class="row">
+            <div class="col-md-2">
+                {{template "goods/_aside"}}
+            </div>
+            <div class="col-md-10">
+                产品列表
+            </div>
+        </div>
+
+
+    </div>
+</body>
+
+{{template "layout/footer"}}
+{{end}}
