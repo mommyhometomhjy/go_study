@@ -145,10 +145,33 @@ func ExportGoodsIncludePrice() {
 	}
 }
 
-func GetGoodss() []Goods {
+func GetGoodss(page int) ([]Goods, BasePage) {
+	var total, lastPage, nextPage, currentPage int
+	db.Model(&Goods{}).Count(&total)
+
+	//page从1开始
+	offset := (page - 1) * 10
+	totalPage := int(math.Ceil(float64(total) / 10.0))
+	lastPage = page - 1
+	currentPage = page
+	nextPage = page + 1
+	if lastPage < 1 {
+		lastPage = 1
+	}
+	if nextPage > totalPage {
+		nextPage = totalPage
+	}
+
 	var goodss []Goods
-	db.Find(&goodss)
-	return goodss
+	db.Offset(offset).Limit(10).Find(&goodss)
+
+	basepage := BasePage{
+		PrevPage:    lastPage,
+		NextPage:    nextPage,
+		Total:       totalPage,
+		CurrentPage: currentPage,
+	}
+	return goodss, basepage
 }
 
 func GetGoodsById(id int) Goods {

@@ -11,10 +11,16 @@ import (
 
 //index
 func getGoodss(c *gin.Context) {
-	goodss := model.GetGoodss()
+	p := 1
+	sp := c.Query("page")
+	if sp != "" {
+		p, _ = strconv.Atoi(sp)
+	}
+	goodss, page := model.GetGoodss(p)
 	c.HTML(200, "goods/index", gin.H{
 		"Title":  "产品列表",
 		"Goodss": goodss,
+		"Page":   page,
 	})
 }
 func goodsNew(c *gin.Context) {

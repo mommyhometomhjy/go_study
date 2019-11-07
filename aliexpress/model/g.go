@@ -29,3 +29,10 @@ func ConnectToDB() *gorm.DB {
 	db.AutoMigrate(&StandShippingCost{})
 	return db
 }
+
+type BasePage struct {
+	PrevPage    int
+	NextPage    int
+	Total       int
+	CurrentPage int
+}
