@@ -3,6 +3,7 @@ package router
 import (
 	"aliexpress/model"
 	"fmt"
+	"net/http"
 	"strconv"
 	"strings"
 
@@ -12,17 +13,26 @@ import (
 
 //index
 func getGoodss(c *gin.Context) {
-	p := 1
-	sp := c.Query("page")
-	if sp != "" {
-		p, _ = strconv.Atoi(sp)
+	sp := c.DefaultQuery("page", "1")
+	p, _ := strconv.Atoi(sp)
+	no := c.PostForm("no")
+	if no == "" {
+		no = c.Query("no")
 	}
-	goodss, page := model.GetGoodss(p)
+	if no != "" {
+		no = strings.ToUpper(no)
+	}
+	goodss, total := model.SearchGoodsByGoodsNo(no, p, 10)
+	page := BasePageViewModel{}
+	page.SetBasePageViewModel(total, p, 10)
+	page.SetPrevAndNextPage()
 	c.HTML(200, "goods/index", gin.H{
 		"Title":  "产品列表",
 		"Goodss": goodss,
 		"Page":   page,
+		"Search": no,
 	})
+
 }
 func goodsNew(c *gin.Context) {
 	c.HTML(200, "goods/new", gin.H{
@@ -86,8 +96,7 @@ func goodsCreate(c *gin.Context) {
 			model.CreateGoods(&goods)
 		}
 	}
-	model.UpdateGoodsPrice()
-	getGoodss(c)
+	c.Redirect(http.StatusMovedPermanently, "/goods/index?no="+goodsno)
 }
 
 func parseStandardShippingCost(c *gin.Context) {

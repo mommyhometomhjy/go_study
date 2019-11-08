@@ -60,50 +60,31 @@ func GetGoodsByGoodsNo(goodsNo string) Goods {
 	return goods
 }
 
-func GetGoodss(page int) ([]Goods, BasePage) {
-	var total, lastPage, nextPage, currentPage int
-	db.Model(&Goods{}).Count(&total)
-
-	//page从1开始
-	offset := (page - 1) * 10
-	totalPage := int(math.Ceil(float64(total) / 10.0))
-	lastPage = page - 1
-	currentPage = page
-	nextPage = page + 1
-	if lastPage < 1 {
-		lastPage = 1
-	}
-	if nextPage > totalPage {
-		nextPage = totalPage
-	}
-
-	var goodss []Goods
-	db.Offset(offset).Limit(10).Find(&goodss)
-
-	basepage := BasePage{
-		PrevPage:    lastPage,
-		NextPage:    nextPage,
-		Total:       totalPage,
-		CurrentPage: currentPage,
-	}
-	return goodss, basepage
-}
-
 func GetGoodsById(id int) Goods {
 	var goods Goods
 	db.First(&goods, id)
 	return goods
 }
 
+func SearchGoodsByGoodsNo(no string, page, limit int) ([]Goods, int) {
+	var total int
+	db.Model(&Goods{}).Where("goods_no like ?", "%"+no+"%").Count(&total)
+
+	offset := (page - 1) * limit
+
+	var goodss []Goods
+	db.Offset(offset).Limit(limit).Where("goods_no like ?", "%"+no+"%").Find(&goodss)
+	return goodss, total
+}
+
 //售价自动计算
 func (g *Goods) BeforeSave() {
 	if g.GoodsWeight > 0 && g.GoodsPrice > 0 {
-		percent, exchange := 0.857, 7.0
 		w := fmt.Sprintf("%d", int(math.Ceil(g.GoodsWeight/10.0)*10))
 
 		standShippingCost := GetPriceByWeight(w)
 		g.GoodsLastSellPrice = g.GoodsSellPrice
-		g.GoodsSellPrice = math.Ceil((g.GoodsPrice+3+standShippingCost)/percent/exchange) - 0.01
+		g.GoodsSellPrice = math.Ceil((g.GoodsPrice+PROFIT+standShippingCost)/PERCENT/EXCHANGE) - 0.01
 
 	}
 }

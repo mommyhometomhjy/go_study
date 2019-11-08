@@ -9,7 +9,14 @@ import (
 	_ "github.com/jinzhu/gorm/dialects/sqlite"
 )
 
-var db *gorm.DB
+var (
+	db                        *gorm.DB
+	PERCENT, EXCHANGE, PROFIT float64
+)
+
+func init() {
+	PERCENT, EXCHANGE, PROFIT = config.GetAliexpressPercentExchangeProfie()
+}
 
 func SetDB(database *gorm.DB) {
 	db = database
