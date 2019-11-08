@@ -74,53 +74,35 @@
                         </td>
                     </tr>
                     {{end}}
-                    <script>
-                        $(document).ready(function () {
-                            $(".deletegoodsbutton").click(function () {
-                                var self = $(this)
-                                var id = self.attr("data-id")
-                                layer.confirm('确认删除吗？', {
-                                    btn: ['确认']
-                                }, function () {
-
-                                    $.post("/goods/delete/" + id, function (resp) {
-                                        layer.msg(resp, {
-                                            offset: 't',
-                                            time: 2000,
-                                            anim: 1
-                                        })
-                                        if (resp == "删除成功") {
-                                            self.parentsUntil("tr").parent().remove()
-                                        }
-
-                                    }
-                                    )
-                                });
-
-                            })
-
-                        })
-                    </script>
                 </table>
                 <div class="row">
-                    <div class="col-sm-2">
+                    <div class="col-sm-12">
 
                         <ul class="pagination">
-                            <li class="{{if eq .Page.PrevPage 0}}disabled{{end}}">
-
+                            <li class="{{if eq .Page.CurrentPage 1}}disabled{{end}}">
                                 <a href="/goods/index?no={{.Search}}&page={{.Page.PrevPage}}">上一页</a>
-
                             </li>
-                            <li class="{{if eq .Page.NextPage .Page.TotalPage}}disabled{{end}}">
-
+                            <li>
+                                &nbsp;
+                            </li>
+                            <li class="{{if eq .Page.CurrentPage .Page.TotalPage}}disabled{{end}}">
                                 <a href="/goods/index?no={{.Search}}&page={{.Page.NextPage}}">下一页</a>
-
+                            </li>
+                            <li>
+                                &nbsp;
+                            </li>
+                            <li>
+                                跳转至<input type="text" id="skiptopage" style="width: 30px" />页面<button
+                                    class="btn btn-default" id="skiptopagebutton">Go</button>
+                            </li>
+                            <li>
+                                &nbsp;
+                            </li>
+                            <li>
+                                当前第{{.Page.CurrentPage}}页/共{{.Page.TotalPage}}页
                             </li>
                         </ul>
 
-                    </div>
-                    <div class="col-sm-10">
-                        当前第{{.Page.CurrentPage}}页/共{{.Page.TotalPage}}页
                     </div>
                 </div>
             </div>
@@ -129,6 +111,39 @@
 
     </div>
     {{template "goods/_standardshipping"}}
+    <script>
+        $(document).ready(function () {
+            $(".deletegoodsbutton").click(function () {
+                var self = $(this)
+                var id = self.attr("data-id")
+                layer.confirm('确认删除吗？', {
+                    btn: ['确认']
+                }, function () {
+
+                    $.post("/goods/delete/" + id, function (resp) {
+                        layer.msg(resp, {
+                            offset: 't',
+                            time: 2000,
+                            anim: 1
+                        })
+                        if (resp == "删除成功") {
+                            self.parentsUntil("tr").parent().remove()
+                        }
+
+                    }
+                    )
+                });
+
+            })
+
+            $("#skiptopagebutton").click(function () {
+                topage = $("#skiptopage").val()
+                // console.log(topage)
+                window.location.href = "/goods/index?no={{.Search}}&page=" + topage
+            })
+
+        })
+    </script>
 </body>
 
 {{template "layout/footer"}}

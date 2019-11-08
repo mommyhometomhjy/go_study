@@ -25,7 +25,7 @@ func getGoodss(c *gin.Context) {
 	goodss, total := model.SearchGoodsByGoodsNo(no, p, 10)
 	page := BasePageViewModel{}
 	page.SetBasePageViewModel(total, p, 10)
-	page.SetPrevAndNextPage()
+
 	c.HTML(200, "goods/index", gin.H{
 		"Title":  "产品列表",
 		"Goodss": goodss,
