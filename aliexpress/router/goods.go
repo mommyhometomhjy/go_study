@@ -6,6 +6,7 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/360EntSecGroup-Skylar/excelize"
 	"github.com/gin-gonic/gin"
 )
 
@@ -90,6 +91,7 @@ func goodsCreate(c *gin.Context) {
 }
 
 func parseStandardShippingCost(c *gin.Context) {
+	model.DeleteStandShippingCost()
 
 	file, err := c.FormFile("file")
 	if err != nil {
@@ -103,7 +105,28 @@ func parseStandardShippingCost(c *gin.Context) {
 	}
 	defer src.Close()
 
-	model.ParseStandardShippingExcel(src)
+	f, err := excelize.OpenReader(src)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	rows := f.GetRows("Worksheet1")
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	for index, row := range rows {
+		if index == 0 {
+			continue
+		}
+		weight := row[0]
+		price, _ := strconv.ParseFloat(row[1], 64)
+		s := model.StandShippingCost{
+			Weight: weight,
+			Price:  price,
+		}
+		model.CreateShippingCost(&s)
+	}
 	model.UpdateGoodsPrice()
 	getGoodss(c)
 }
