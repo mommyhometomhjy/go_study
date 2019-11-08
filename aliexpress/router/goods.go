@@ -165,3 +165,29 @@ func goodsUpdate(c *gin.Context) {
 	model.UpdateGoods(&goods)
 	goodsEdit(c)
 }
+
+func exportsellpricechanged(c *gin.Context) {
+	goodss := model.GetGoodsSellPriceChanged()
+
+	c.Writer.Header().Add("Content-type", "application/octet-stream")
+	c.Writer.Header().Add("content-disposition", "attachment; filename=\"价格变动.xlsx\"")
+	f := excelize.NewFile()
+
+	f.SetCellValue("Sheet1", "A1", "货号")
+	f.SetCellValue("Sheet1", "B1", "成本价")
+	f.SetCellValue("Sheet1", "C1", "重量")
+	f.SetCellValue("Sheet1", "D1", "售价")
+	f.SetCellValue("Sheet1", "E1", "上次售价")
+
+	for index, goods := range goodss {
+		sheeti := strconv.Itoa(index + 2)
+		f.SetCellValue("Sheet1", "A"+sheeti, goods.GoodsNo)
+		f.SetCellValue("Sheet1", "B"+sheeti, goods.GoodsPrice)
+		f.SetCellValue("Sheet1", "C"+sheeti, goods.GoodsWeight)
+		f.SetCellValue("Sheet1", "D"+sheeti, goods.GoodsSellPrice)
+		f.SetCellValue("Sheet1", "E"+sheeti, goods.GoodsLastSellPrice)
+		model.UpdateGoods(&goods)
+	}
+	f.Write(c.Writer)
+
+}

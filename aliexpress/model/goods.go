@@ -77,6 +77,12 @@ func SearchGoodsByGoodsNo(no string, page, limit int) ([]Goods, int) {
 	return goodss, total
 }
 
+func GetGoodsSellPriceChanged() []Goods {
+	var goodss []Goods
+	db.Where("goods_sell_price <> goods_last_sell_price").Find(&goodss)
+	return goodss
+}
+
 //售价自动计算
 func (g *Goods) BeforeSave() {
 	if g.GoodsWeight > 0 && g.GoodsPrice > 0 {

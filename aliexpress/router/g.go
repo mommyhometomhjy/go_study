@@ -72,7 +72,11 @@ func registerRouter() {
 		// //修改指定goods
 		goods.POST("/edit/:id", goodsUpdate)
 
+		//导入标准运费
 		goods.POST("/importstandardshippingcost", parseStandardShippingCost)
+
+		//导出价格有变动的
+		goods.GET("/exportsellpricechanged", exportsellpricechanged)
 	}
 }
 
