@@ -86,6 +86,7 @@ type BasePageViewModel struct {
 	Total       int
 	CurrentPage int
 	Limit       int
+	TotalPage   int
 }
 
 // SetPrevAndNextPage func
@@ -94,7 +95,7 @@ func (v *BasePageViewModel) SetPrevAndNextPage() {
 		v.PrevPage = v.CurrentPage - 1
 	}
 
-	if (v.Total-1)/v.Limit >= v.CurrentPage {
+	if v.TotalPage > v.CurrentPage {
 		v.NextPage = v.CurrentPage + 1
 	}
 }
@@ -104,5 +105,11 @@ func (v *BasePageViewModel) SetBasePageViewModel(total, page, limit int) {
 	v.Total = total
 	v.CurrentPage = page
 	v.Limit = limit
+
+	if total%limit == 0 {
+		v.TotalPage = total / limit
+	} else {
+		v.TotalPage = total/limit + 1
+	}
 	v.SetPrevAndNextPage()
 }

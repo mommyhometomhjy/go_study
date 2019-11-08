@@ -1,9 +1,29 @@
 {{define "layout/nav"}}
-<nav>
-    <ul class="nav  nav-pills">
-        <li><a href="/order/index">订单</a></li>
-        <li><a href="/goods/index">产品</a></li>
-    </ul>
+<nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container-fluid">
+        <ul class="nav navbar-nav">
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                    aria-expanded="false">订单 <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                    <li><a href="/order/index">所有订单</a></li>
+                    <li><a href="/order/new">新建订单</a></li>
+                    <li><a href="#">物流追踪</a></li>
+                </ul>
+            </li>
+
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                    aria-expanded="false">产品 <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                    <li><a href="/goods/index">所有产品</a></li>
+                    <li><a href="/goods/new">新建产品</a></li>
+                </ul>
+            </li>
+            
+        </ul>
+    </div>
+
 </nav>
 
 {{end}}

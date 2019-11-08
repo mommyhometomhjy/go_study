@@ -2,13 +2,10 @@
 {{template "layout/header" .}}
 
 <body>
+    {{template "layout/nav"}}
     <div class="container-fluid">
-        {{template "layout/nav"}}
         <div class="row">
-            <div class="col-md-2">
-                {{template "order/_aside"}}
-            </div>
-            <div class="col-md-10">
+            <div class="col-md-12">
                 <div class="row">
 
                     <button type="button" class="btn btn-primary btn-lg" data-toggle="modal"

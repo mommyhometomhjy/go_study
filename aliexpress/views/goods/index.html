@@ -2,28 +2,43 @@
 {{template "layout/header" .}}
 
 <body>
+    {{template "layout/nav"}}
     <div class="container-fluid">
-        {{template "layout/nav"}}
+
         <div class="row">
-            <div class="col-md-2">
-                {{template "goods/_aside"}}
-            </div>
-            <div class="col-md-10">
+            <div class="col-md-12">
                 <div class="row">
                     <div class="col-sm-4">
                         <form action="/goods/index" method="GET" class="form-inline">
-                            <input type="text" name="no">
+                            <input type="text" name="no" placeholder="输入货号模糊搜索">
                             <button type="submit" class="btn btn-default">搜索</button>
                         </form>
                     </div>
                     <div class="col-sm-1">
-                        <button type="button" class="btn btn-default" data-toggle="modal"
-                            data-target="#standardshipping">
-                            导入标准运费
-                        </button>
+
+                        <div class="dropdown">
+                            <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                导入/导出
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                                <li>
+                                    <a href="/goods/exportsellpricechanged">售价变动</a>
+                                </li>
+                                <li>
+                                    <a href="#" data-toggle="modal" data-target="#standardshipping">
+                                        导入标准运费
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+
+
+
                     </div>
                     <div class="col-sm-1">
-                        <a href="/goods/exportsellpricechanged" class="btn btn-default">售价变动</a>
+
                     </div>
                 </div>
                 <table class="table">
@@ -91,20 +106,21 @@
                     <div class="col-sm-2">
 
                         <ul class="pagination">
-                            <li>
-                                {{if gt .Page.PrevPage 0}}
+                            <li class="{{if eq .Page.PrevPage 0}}disabled{{end}}">
+
                                 <a href="/goods/index?no={{.Search}}&page={{.Page.PrevPage}}">上一页</a>
-                                {{end}}
+
                             </li>
-                            <li>
-                                {{if gt .Page.NextPage 0}}
+                            <li class="{{if eq .Page.NextPage .Page.TotalPage}}disabled{{end}}">
+
                                 <a href="/goods/index?no={{.Search}}&page={{.Page.NextPage}}">下一页</a>
-                                {{end}}</li>
+
+                            </li>
                         </ul>
 
                     </div>
                     <div class="col-sm-10">
-                        当前第{{.Page.CurrentPage}}页
+                        当前第{{.Page.CurrentPage}}页/共{{.Page.TotalPage}}页
                     </div>
                 </div>
             </div>

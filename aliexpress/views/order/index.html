@@ -2,13 +2,10 @@
 {{template "layout/header" .}}
 
 <body>
+    {{template "layout/nav"}}
     <div class="container-fluid">
-        {{template "layout/nav"}}
         <div class="row">
-            <div class="col-md-2">
-                {{template "order/_aside"}}
-            </div>
-            <div class="col-md-10">
+            <div class="col-md-12">
                 <div class="row">
                     <div class="col-md-11">
                         <form class="form-inline">
@@ -49,7 +46,7 @@
                                         layer.msg(resp, {
                                             offset: 't',
                                             time: 2000,
-                                            anim:1
+                                            anim: 1
                                         })
                                         self.parentsUntil("tr").parent().remove()
                                     }
@@ -57,7 +54,7 @@
                                 });
 
                             })
-                           
+
                         })
                     </script>
                 </table>
