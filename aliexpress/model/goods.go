@@ -40,17 +40,6 @@ func FindGoodsByGoodsNo(goodsNo string) Goods {
 	return goods
 }
 func UpdateGoods(goods *Goods) {
-
-	if goods.GoodsWeight > 0 && goods.GoodsPrice > 0 {
-		percent, exchange := 0.857, 7.0
-		w := fmt.Sprintf("%d", int(math.Ceil(goods.GoodsWeight/10.0)*10))
-
-		standShippingCost := GetPriceByWeight(w)
-		goods.GoodsLastSellPrice = goods.GoodsSellPrice
-		goods.GoodsSellPrice = math.Ceil((goods.GoodsPrice+3+standShippingCost)/percent/exchange) - 0.01
-
-	}
-
 	db.Save(goods)
 }
 func UpdateGoodsPrice() {
@@ -58,7 +47,6 @@ func UpdateGoodsPrice() {
 	db.Where("goods_weight >0 and goods_price >0").Find(&goodss)
 	for _, goods := range goodss {
 		UpdateGoods(&goods)
-
 	}
 }
 
@@ -216,4 +204,16 @@ func DeleteGoodsById(id int) {
 	db.First(&goods, id)
 
 	db.Delete(&goods)
+}
+
+func (g *Goods) BeforeSave() {
+	if g.GoodsWeight > 0 && g.GoodsPrice > 0 {
+		percent, exchange := 0.857, 7.0
+		w := fmt.Sprintf("%d", int(math.Ceil(g.GoodsWeight/10.0)*10))
+
+		standShippingCost := GetPriceByWeight(w)
+		g.GoodsLastSellPrice = g.GoodsSellPrice
+		g.GoodsSellPrice = math.Ceil((g.GoodsPrice+3+standShippingCost)/percent/exchange) - 0.01
+
+	}
 }
